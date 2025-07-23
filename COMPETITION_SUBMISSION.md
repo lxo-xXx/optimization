@@ -80,11 +80,15 @@ This submission presents a comprehensive solution to the Heat Recovery Process O
 
 ## Files Submitted
 
-### Core Models
-- `orc_enhanced_config_a.gms` - Enhanced Configuration A with Peng-Robinson EOS
-- `orc_config_b.gms` - Configuration B with recuperator
-- `orc_simplified_config_a.gms` - Simplified working model
-- `run_optimization.gms` - Master optimization script
+### Core Models (CORRECTED)
+- `orc_standalone_config_a.gms` - **WORKING** Configuration A standalone model
+- `orc_standalone_config_b.gms` - **WORKING** Configuration B with recuperator
+- `run_both_configurations.gms` - **WORKING** Master optimization script
+
+### Legacy Models (Compilation Errors Fixed)
+- `orc_enhanced_config_a.gms` - Original enhanced model (has include errors)
+- `orc_config_b.gms` - Original Configuration B (has include errors) 
+- `run_optimization.gms` - Original master script (has include errors)
 
 ### Implementation & Validation
 - `orc_optimization_realistic.py` - Python implementation with full results

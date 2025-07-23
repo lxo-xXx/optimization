@@ -81,25 +81,25 @@ W_net = η_gen × W_turb - W_pump
 
 ### Running Individual Models
 
-1. **Configuration A (Enhanced)**:
+1. **Configuration A (Standalone - CORRECTED)**:
    ```
-   gams orc_enhanced_config_a.gms
-   ```
-
-2. **Configuration B (Recuperator)**:
-   ```
-   gams orc_config_b.gms
+   gams orc_standalone_config_a.gms
    ```
 
-3. **Simplified Model (for testing)**:
+2. **Configuration B (Standalone - CORRECTED)**:
    ```
-   gams orc_simplified_config_a.gms
+   gams orc_standalone_config_b.gms
    ```
 
-4. **Complete Analysis**:
+3. **Complete Analysis (CORRECTED)**:
    ```
-   gams run_optimization.gms
+   gams run_both_configurations.gms
    ```
+
+4. **Legacy Models (have compilation errors)**:
+   - `orc_enhanced_config_a.gms` - Original enhanced model
+   - `orc_config_b.gms` - Original Configuration B
+   - `run_optimization.gms` - Original master script
 
 ### Expected Runtime
 - Simple models: 1-3 minutes
