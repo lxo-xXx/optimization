@@ -102,9 +102,9 @@ W_pump.lo = 0; W_pump.up = 10000;
 Q_evap.lo = 10000; Q_evap.up = 50000;
 m_wf.lo = 50; m_wf.up = 120;
 
-* Temperature bounds (feasible ranges)
-T.lo('1') = 380; T.up('1') = 430;  * Evaporator outlet
-T.lo('2') = 350; T.up('2') = 410;  * Turbine outlet
+* Temperature bounds (FIXED - realistic and feasible ranges)
+T.lo('1') = 400; T.up('1') = 438;  * Evaporator outlet (below pinch limit)
+T.lo('2') = 350; T.up('2') = 420;  * Turbine outlet
 T.lo('3') = T_cond + DT_approach; T.up('3') = T_cond + DT_approach + 15;  * Condenser outlet
 T.lo('4') = T_cond + DT_approach; T.up('4') = 380;  * Pump outlet
 
@@ -179,8 +179,8 @@ energy_bal_turb.. W_turb =e= m_wf * (h('1') - h('2'));
 energy_bal_pump.. W_pump =e= m_wf * (h('4') - h('3'));
 energy_bal_hw.. Q_evap =e= m_hw * 4.18 * (T_hw_in - T_hw_out);
 
-* Process constraints
-pinch_point.. T('1') =l= T_hw_out - DT_pinch;
+* Process constraints (FIXED - realistic pinch point)
+pinch_point.. T('1') =l= T_hw_in - DT_pinch;  * FIXED: Use inlet temp, not outlet
 approach_temp.. T('3') =g= T_cond + DT_approach;
 pressure_relation.. P('1') =g= P('2') + 5;
 
@@ -198,23 +198,23 @@ compressibility(comp).. Z_eff(comp) =e= 1 - 0.1 * Pr_eff(comp) / Tr_eff(comp);
 * Simplified fugacity coefficient (maintains concept)
 fugacity_simple(comp).. phi_eff(comp) =e= exp(-0.1 * Pr_eff(comp) / Tr_eff(comp));
 
-* Kamath-inspired enthalpy calculations (teammate's approach)
-* Vapor states (1, 2): Kamath polynomial + PR departure
+* Kamath-inspired enthalpy calculations (FIXED - realistic scale)
+* Vapor states (1, 2): Kamath polynomial + PR departure + latent heat
 enthalpy_vapor(comp)$(ord(comp) <= 2).. h(comp) =e= 
     sum(i, y(i) * (kamath_coeff(i,'a') + 
                    kamath_coeff(i,'b') * T(comp) + 
                    kamath_coeff(i,'c') * sqr(T(comp)) + 
                    kamath_coeff(i,'d') * power(T(comp),3))) +
-    R_gas * T(comp) * (Z_eff(comp) - 1) / sum(i, y(i) * fluid_props(i,'Mw')) * 1000 +
+    R_gas * T(comp) * (Z_eff(comp) - 1) / sum(i, y(i) * fluid_props(i,'Mw')) * 0.1 +
     sum(i, y(i) * fluid_props(i,'Hvap'));
 
-* Liquid states (3, 4): Kamath polynomial + PR departure - latent heat
+* Liquid states (3, 4): Kamath polynomial + PR departure (no latent heat)
 enthalpy_liquid(comp)$(ord(comp) >= 3).. h(comp) =e= 
     sum(i, y(i) * (kamath_coeff(i,'a') + 
                    kamath_coeff(i,'b') * T(comp) + 
                    kamath_coeff(i,'c') * sqr(T(comp)) + 
                    kamath_coeff(i,'d') * power(T(comp),3))) +
-    R_gas * T(comp) * (Z_eff(comp) - 1) / sum(i, y(i) * fluid_props(i,'Mw')) * 1000;
+    R_gas * T(comp) * (Z_eff(comp) - 1) / sum(i, y(i) * fluid_props(i,'Mw')) * 0.1;
 
 * Efficiency constraints
 turbine_efficiency.. h('2') =e= h('1') - eta_turb * (h('1') - h('3'));
@@ -225,8 +225,8 @@ pump_efficiency.. h('4') =e= h('3') + (P('4') - P('3')) * 0.001 *
 * INITIAL VALUES (Feasible Starting Point)
 * ================================================================
 
-* Temperature initial values
-T.l('1') = 400;  * Evaporator outlet
+* Temperature initial values (FIXED - within pinch constraint)
+T.l('1') = 430;  * Evaporator outlet (below 438.15 K pinch limit)
 T.l('2') = 380;  * Turbine outlet
 T.l('3') = T_cond + DT_approach;  * Condenser outlet
 T.l('4') = T_cond + DT_approach + 5;  * Pump outlet
