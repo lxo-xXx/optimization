@@ -356,7 +356,7 @@ put "- Fugacity Coefficient: ", phi_eff.l('1'):5:3/;
 put /;
 put "WORKING FLUID SELECTION:"/;
 loop(i$(y.l(i) > 0.5),
-    put "Selected Fluid: ", i:>8/;
+    put "Selected Fluid: ", i.tl/;
     put "Critical Temperature: ", fluid_props(i,'Tc'):6:1, " K"/;
     put "Critical Pressure: ", fluid_props(i,'Pc'):6:1, " bar"/;
     put "Global Warming Potential: ", fluid_props(i,'GWP'):6:0/;
