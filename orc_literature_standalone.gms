@@ -141,7 +141,12 @@ VARIABLES
     obj_combined_lit        'Combined weighted objective'
     
     Z_lit(states_lit)       'Compressibility factor [-]'
-    alpha_pr_lit(states_lit) 'PR alpha function [-]';
+    alpha_pr_lit(states_lit) 'PR alpha function [-]'
+    
+    Tc_sel_lit              'Selected fluid critical temperature [K]'
+    Pc_sel_lit              'Selected fluid critical pressure [bar]'
+    omega_sel_lit           'Selected fluid acentric factor [-]'
+    MW_sel_lit              'Selected fluid molecular weight [kg/kmol]';
 
 * Variable bounds
 T_lit.lo(states_lit) = 298.15;  T_lit.up(states_lit) = 500;
@@ -152,20 +157,25 @@ Z_lit.lo(states_lit) = 0.3;     Z_lit.up(states_lit) = 1.2;
 alpha_pr_lit.lo(states_lit) = 0.5; alpha_pr_lit.up(states_lit) = 3.0;
 W_net_lit.lo = 1;               W_net_lit.up = 10000;
 
+Tc_sel_lit.lo = 300;            Tc_sel_lit.up = 700;
+Pc_sel_lit.lo = 5;              Pc_sel_lit.up = 100;
+omega_sel_lit.lo = 0;           omega_sel_lit.up = 1;
+MW_sel_lit.lo = 20;             MW_sel_lit.up = 300;
+
 * Initial values
 T_lit.l('1') = 343.15;  T_lit.l('2') = 348.15;  T_lit.l('3') = 430;  T_lit.l('4') = 343.15;
 P_lit.l('1') = 1.0;     P_lit.l('2') = 25;      P_lit.l('3') = 25;   P_lit.l('4') = 1.0;
 h_lit.l(states_lit) = 300;  m_wf_lit.l = 10;    Z_lit.l(states_lit) = 0.9;
 alpha_pr_lit.l(states_lit) = 1.0; 
 
+Tc_sel_lit.l = 450;
+Pc_sel_lit.l = 30;
+omega_sel_lit.l = 0.2;
+MW_sel_lit.l = 100; 
+
 * =============================================================================
-* UNIQUE PENG-ROBINSON PARAMETERS (No conflicts)
+* UNIQUE PENG-ROBINSON VARIABLES (No conflicts)
 * =============================================================================
-PARAMETERS
-    Tc_sel_lit              'Selected fluid critical temperature'
-    Pc_sel_lit              'Selected fluid critical pressure'
-    omega_sel_lit           'Selected fluid acentric factor'
-    MW_sel_lit              'Selected fluid molecular weight';
 
 * =============================================================================
 * EQUATIONS
