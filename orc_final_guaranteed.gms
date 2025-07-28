@@ -281,9 +281,8 @@ display "=== KAMATH + PR VALIDATION ===";
 display kamath_pr_validation;
 
 display "=== WORKING FLUID SELECTION ===";
-loop(i$(y.l(i) > 0.1),
-    display "Selected:", i, "with fraction", y.l(i);
-);
+display "Selected working fluids (fractions > 0.1):";
+display y.l;
 
 if(orc_final_guaranteed.modelstat = 1,
     display "🏆 OPTIMAL SOLUTION ACHIEVED - COMPETITION WINNER!";
