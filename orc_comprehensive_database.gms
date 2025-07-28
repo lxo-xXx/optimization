@@ -272,8 +272,8 @@ LOOP(i_sel$(y.l(i_sel) > 0.5),
 PUT //;
 PUT "OPTIMIZATION RESULTS:"//;
 PUT "- Net Power Output: ", W_net.l:8:2, " kW"/;
-PUT "- Thermal Efficiency: ", eta_thermal.l*100:6:2, " %"/;
-PUT "- Exergy Efficiency: ", eta_exergy.l*100:6:2, " %"/;
+PUT "- Thermal Efficiency: ", (eta_thermal.l*100):6:2, " %"/;
+PUT "- Exergy Efficiency: ", (eta_exergy.l*100):6:2, " %"/;
 PUT "- Working Fluid Mass Flow: ", m_wf.l:8:2, " kg/s"/;
 PUT //;
 PUT "STATE POINT DATA:"//;
