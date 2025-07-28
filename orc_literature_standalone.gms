@@ -119,8 +119,10 @@ SCALARS
 SETS
     states_lit /1*4/;
 
+BINARY VARIABLES
+    y_lit(fluids)           'Binary fluid selection variable';
+
 VARIABLES
-    y_lit(fluids)           'Binary fluid selection variable'
     T_lit(states_lit)       'Temperature at each state [K]'
     P_lit(states_lit)       'Pressure at each state [bar]'
     h_lit(states_lit)       'Enthalpy at each state [kJ/kg]'
