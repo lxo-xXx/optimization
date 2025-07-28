@@ -24,6 +24,14 @@ Table fluid_props(i,*) Working fluid properties
     R290       369.89  42.51   0.1521  44.10   425.2   2.25    3
     R1234yf    367.85  33.82   0.276   114.04  178.3   1.45    4;
 
+Table kamath_coeff(i,*) Kamath enthalpy polynomial coefficients
+                a       b       c       d
+    R134a      -50.0   0.85    0.002   -1e-6
+    R245fa     -45.0   0.90    0.0018  -8e-7
+    R600a      -40.0   0.95    0.0015  -5e-7
+    R290       -35.0   1.00    0.0012  -3e-7
+    R1234yf    -48.0   0.88    0.0019  -9e-7;
+
 Variables
     W_net       Net power output [kW]
     Q_evap      Heat input to evaporator [kW]
@@ -85,9 +93,12 @@ reduced_temp.. Tr_eff =e= sum(i, y(i) * T('1') / fluid_props(i,'Tc'));
 alpha_pr.. alpha_eff =e= 1.0 + 0.05 * (1 - Tr_eff) * sum(i, y(i) * fluid_props(i,'omega'));
 
 enthalpy_calc(comp).. h(comp) =e= 
-    sum(i, y(i) * fluid_props(i,'cp_avg') * T(comp)) +
+    sum(i, y(i) * (kamath_coeff(i,'a') + 
+                   kamath_coeff(i,'b') * T(comp) + 
+                   kamath_coeff(i,'c') * sqr(T(comp)) + 
+                   kamath_coeff(i,'d') * power(T(comp),3))) +
     sum(i, y(i) * fluid_props(i,'Hvap')) * 0.6$(ord(comp) <= 2) +
-    20 * alpha_eff * (T(comp) - 350) / 100;
+    10 * alpha_eff * (T(comp) - 350) / 100;
 
 T.l('1') = 425;
 T.l('2') = 375;
