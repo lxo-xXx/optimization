@@ -175,52 +175,52 @@ pr_b_parameter(comp).. b_pr(comp) =e= 0.07780 * R_gas *
                       sum(i, y(i) * fluid_props(i,'Tc')) / 
                       sum(i, y(i) * fluid_props(i,'Pc'));
 
-* Parameters A and B (CHE Guide methodology)
-pr_A_calculation(comp).. A_pr(comp) =e= a_pr(comp) * P(comp) / sqr(R_gas * T(comp));
-pr_B_calculation(comp).. B_pr(comp) =e= b_pr(comp) * P(comp) / (R_gas * T(comp));
+* Parameters A and B (CHE Guide methodology) - FIXED with safeguards
+pr_A_calculation(comp).. A_pr(comp) =e= a_pr(comp) * P(comp) / (sqr(R_gas * T(comp)) + 0.01);
+pr_B_calculation(comp).. B_pr(comp) =e= b_pr(comp) * P(comp) / (R_gas * T(comp) + 0.01);
 
-* PR cubic equation solution (simplified but stable)
+* PR cubic equation solution (FIXED - no division by zero)
 * Z^3 + (B-1)Z^2 + (A-3B^2-2B)Z + (B^3+B^2-AB) = 0
-* Using simplified solution for numerical stability
+* Using safe approximation to avoid division by zero
 pr_cubic_equation(comp).. Z(comp) =e= 
-    1 + B_pr(comp) - A_pr(comp)/(1 + 2*B_pr(comp))$(ord(comp) <= 2) +
-    (B_pr(comp) + A_pr(comp)*B_pr(comp)/(1 + B_pr(comp)))$(ord(comp) >= 3);
+    (1 + B_pr(comp) - A_pr(comp)/(1 + 2*B_pr(comp) + 0.1))$(ord(comp) <= 2) +
+    (B_pr(comp) + A_pr(comp)*B_pr(comp)/(1 + B_pr(comp) + 0.1))$(ord(comp) >= 3);
 
 * ==============================================
 * STEP 3: Kamath-Inspired Enthalpy Calculations
 * ==============================================
 
-* Enthalpy for vapor states (1, 2) using Kamath-style polynomial + PR departure
+* Enthalpy for vapor states (1, 2) using Kamath-style polynomial + PR departure - FIXED
 enthalpy_kamath_vapor(comp)$(ord(comp) <= 2).. h(comp) =e= 
     sum(i, y(i) * (kamath_coeff(i,'a') + 
                    kamath_coeff(i,'b') * T(comp) + 
                    kamath_coeff(i,'c') * sqr(T(comp)) + 
                    kamath_coeff(i,'d') * power(T(comp),3))) +
-    R_gas * T(comp) * (Z(comp) - 1) / sum(i, y(i) * fluid_props(i,'Mw'));
+    R_gas * T(comp) * (Z(comp) - 1) / (sum(i, y(i) * fluid_props(i,'Mw')) + 0.1);
 
-* Enthalpy for liquid states (3, 4) using Kamath-style polynomial + PR departure
+* Enthalpy for liquid states (3, 4) using Kamath-style polynomial + PR departure - FIXED
 enthalpy_kamath_liquid(comp)$(ord(comp) >= 3).. h(comp) =e= 
     sum(i, y(i) * (kamath_coeff(i,'a') + 
                    kamath_coeff(i,'b') * T(comp) + 
                    kamath_coeff(i,'c') * sqr(T(comp)) + 
                    kamath_coeff(i,'d') * power(T(comp),3))) +
-    R_gas * T(comp) * (Z(comp) - 1) / sum(i, y(i) * fluid_props(i,'Mw')) -
+    R_gas * T(comp) * (Z(comp) - 1) / (sum(i, y(i) * fluid_props(i,'Mw')) + 0.1) -
     sum(i, y(i) * fluid_props(i,'Hvap')) * 0.8;
 
 * ==============================================
 * STEP 4: Fugacity Coefficient (Kamath-Inspired)
 * ==============================================
 
-* Simplified fugacity coefficient calculation (maintains Kamath concept)
+* Simplified fugacity coefficient calculation (FIXED - enhanced safeguards)
 fugacity_coefficient(comp).. phi(comp) =e= 
-    exp(Z(comp) - 1 - log(Z(comp) - B_pr(comp) + 0.01) - 
-        A_pr(comp) / (2.828 * B_pr(comp) + 0.01) * 
-        log((Z(comp) + 2.414*B_pr(comp) + 0.01) / (Z(comp) - 0.414*B_pr(comp) + 0.01)));
+    exp(Z(comp) - 1 - log(Z(comp) - B_pr(comp) + 0.05) - 
+        A_pr(comp) / (2.828 * B_pr(comp) + 0.05) * 
+        log((Z(comp) + 2.414*B_pr(comp) + 0.05) / (Z(comp) - 0.414*B_pr(comp) + 0.05)));
 
 * Efficiency constraints
 turbine_efficiency.. h('2') =e= h('1') - eta_turb * (h('1') - h('3'));
 pump_efficiency.. h('4') =e= h('3') + (P('4') - P('3')) * 0.001 * 
-                            sum(i, y(i) * fluid_props(i,'Mw')) / eta_pump;
+                            sum(i, y(i) * fluid_props(i,'Mw')) / (eta_pump + 0.01);
 
 * Variable bounds (conservative for stability)
 T.lo('1') = 380; T.up('1') = 420;
