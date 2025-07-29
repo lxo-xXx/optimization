@@ -75,6 +75,7 @@ VARIABLES
     W_pump              'Pump work [kW]'
     W_net               'Net power [kW]'
     eta_thermal         'Thermal efficiency [-]'
+    eta_exergy          'Exergy efficiency [-]'
     
     * Optimized PR EOS variables
     alpha_pr(states)    'PR alpha function [-]'
@@ -113,7 +114,7 @@ Z_actual.lo(states) = 0.05; Z_actual.up(states) = 1.3;
 H_dep.lo(states) = -50;     H_dep.up(states) = 50;
 H_ideal.lo(states) = 180;   H_ideal.up(states) = 450;
 
-W_net.lo = 100;             W_net.up = 2500;
+W_net.lo = 100;             W_net.up = 15000;
 
 * Optimized initial values based on successful solution
 T.l('1') = 355;  T.l('2') = 370;  T.l('3') = 399;  T.l('4') = 355;
@@ -168,6 +169,7 @@ EQUATIONS
     * Performance
     net_power              'Net power calculation'
     thermal_efficiency     'Thermal efficiency'
+    exergy_efficiency      'Exergy efficiency'
     
     objective              'Maximize net power';
 
@@ -233,6 +235,7 @@ condenser_balance.. m_hw * 4.18 * (T_hw_in - T_hw_out) =g= Q_evap;
 * Performance calculations
 net_power.. W_net =e= eta_gen * (W_turb - W_pump);
 thermal_efficiency.. eta_thermal =e= W_net / (Q_evap + 1.0);
+exergy_efficiency.. eta_exergy =e= W_net / (Q_evap * (1 - T_amb/(T('3') + 0.01)) + 0.01);
 
 * Objective
 objective.. W_net =e= eta_gen * (W_turb - W_pump);
@@ -289,7 +292,7 @@ pr_properties(states,'Z_actual') = Z_actual.l(states);
 competition_metrics('Power_per_kg/s') = W_net.l / m_wf.l;
 competition_metrics('Specific_Work_kJ/kg') = W_net.l / m_wf.l;
 competition_metrics('Heat_Recovery_%') = Q_evap.l / (m_hw * 4.18 * (T_hw_in - T_hw_out)) * 100;
-competition_metrics('Exergy_Efficiency_%') = W_net.l / (Q_evap.l * (1 - T_amb/T.l('3'))) * 100;
+competition_metrics('Exergy_Efficiency_%') = eta_exergy.l * 100;
 
 DISPLAY "=== FINAL OPTIMAL PR EOS RESULTS ===";
 DISPLAY results_summary, state_analysis, pr_properties, competition_metrics;
@@ -334,7 +337,7 @@ PUT "- Net Power Output: ", W_net.l:8:2, " kW"/;
 PUT "- Thermal Efficiency: ", (eta_thermal.l*100):6:2, " %"/;
 PUT "- Power per Mass Flow: ", (W_net.l/m_wf.l):6:2, " kW/(kg/s)"/;
 PUT "- Heat Recovery: ", (Q_evap.l/(m_hw*4.18*(T_hw_in-T_hw_out))*100):6:2, " %"/;
-PUT "- Exergy Efficiency: ", (W_net.l/(Q_evap.l*(1-T_amb/T.l('3')))*100):6:2, " %"/;
+PUT "- Exergy Efficiency: ", (eta_exergy.l*100):6:2, " %"/;
 PUT "- Working Fluid Flow: ", m_wf.l:8:2, " kg/s"/;
 PUT //;
 
