@@ -234,8 +234,15 @@ fluid_properties('Critical_Press_bar') = Pc_selected;
 fluid_properties('Acentric_Factor') = omega_selected;
 fluid_properties('Molecular_Weight') = MW_selected;
 fluid_properties('Literature_Score') = best_fluid_score;
-fluid_properties('GWP') = gwp_data(fluids)$(ord(fluids) = selected_fluid);
-fluid_properties('Safety_Score') = safety_score(fluids)$(ord(fluids) = selected_fluid);
+SCALARS gwp_selected, safety_selected, delta_t_selected;
+LOOP(fluids$(ord(fluids) = selected_fluid),
+    gwp_selected = gwp_data(fluids);
+    safety_selected = safety_score(fluids);
+    delta_t_selected = delta_T_critical(fluids);
+);
+
+fluid_properties('GWP') = gwp_selected;
+fluid_properties('Safety_Score') = safety_selected;
 
 state_data(states,'T_K') = T.l(states);
 state_data(states,'P_bar') = P.l(states);
@@ -260,13 +267,13 @@ PUT //;
 PUT "SELECTED WORKING FLUID:"//;
 LOOP(fluids$(ord(fluids) = selected_fluid),
     PUT "- Name: ", fluids.tl/;
-    PUT "- Literature Score: ", best_fluid_score:6:2/;
-    PUT "- Critical Temperature: ", Tc_selected:8:2, " K"/;
-    PUT "- Critical Pressure: ", Pc_selected:8:2, " bar"/;
-    PUT "- Global Warming Potential: ", gwp_data(fluids):8:0/;
-    PUT "- Safety Score: ", safety_score(fluids):6:2/;
-    PUT "- Delta T Critical: ", delta_T_critical(fluids):8:2, " K"/;
 );
+PUT "- Literature Score: ", best_fluid_score:6:2/;
+PUT "- Critical Temperature: ", Tc_selected:8:2, " K"/;
+PUT "- Critical Pressure: ", Pc_selected:8:2, " bar"/;
+PUT "- Global Warming Potential: ", gwp_selected:8:0/;
+PUT "- Safety Score: ", safety_selected:6:2/;
+PUT "- Delta T Critical: ", delta_t_selected:8:2, " K"/;
 PUT //;
 PUT "COMPETITION PERFORMANCE:"//;
 PUT "- Net Power Output: ", W_net.l:8:2, " kW"/;
