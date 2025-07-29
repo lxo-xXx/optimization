@@ -382,4 +382,4 @@ PUTCLOSE;
 
 DISPLAY "Final optimal results saved to final_optimal_competition_results.txt";
 DISPLAY "====================================================================";
-DISPLAY "COMPETITION MODEL READY! Net Power:", W_net.l:8:2, "kW, Efficiency:", (eta_thermal.l*100):6:2, "%";
+DISPLAY "COMPETITION MODEL READY!";
