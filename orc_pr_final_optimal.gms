@@ -201,11 +201,11 @@ vapor_compressibility(states)..
 liquid_compressibility(states)..
     Z_l(states) =e= B_pr(states) + A_pr(states)*B_pr(states)/(2 + 3*B_pr(states));
 
-* Optimized phase selection
-phase_selection_1.. Z_actual('1') =e= Z_v('1');
-phase_selection_2.. Z_actual('2') =e= 0.8 * Z_v('2') + 0.2 * Z_l('2');
-phase_selection_3.. Z_actual('3') =e= 0.8 * Z_v('3') + 0.2 * Z_l('3');
-phase_selection_4.. Z_actual('4') =e= Z_v('4');
+* Corrected phase selection for proper ORC cycle
+phase_selection_1.. Z_actual('1') =e= Z_l('1');  * Liquid after condenser
+phase_selection_2.. Z_actual('2') =e= Z_l('2');  * Compressed liquid
+phase_selection_3.. Z_actual('3') =e= Z_v('3');  * Vapor after evaporator  
+phase_selection_4.. Z_actual('4') =e= Z_v('4');  * Vapor after turbine
 
 * Stable departure enthalpy
 departure_enthalpy(states)..
