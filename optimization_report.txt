@@ -1,0 +1,17 @@
+Heat Recovery Process Optimization - Final Report
+============================================================
+
+Problem Specifications:
+- Hot water inlet temperature: 170.0°C
+- Hot water outlet temperature: 25.0°C
+- Hot water mass flow rate: 27.78 kg/s
+- Available heat: 16837.5 kW
+- Condensing temperature: 70.0°C
+
+Optimization Results:
+------------------------------
+Configuration A: No feasible solution found
+
+Configuration B: No feasible solution found
+
+No feasible solutions found. Review problem constraints.

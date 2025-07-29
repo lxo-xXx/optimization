@@ -1,0 +1,49 @@
+* IPOPT Options for Robust PR EOS Convergence
+* ===========================================
+
+* Barrier parameter update
+mu_strategy                adaptive_monotone
+mu_init                    1e-3
+mu_min                     1e-12
+
+* Line search and step calculation
+line_search_method         filter
+alpha_for_y                primal
+recalc_y                   no
+
+* Convergence tolerances
+tol                        1e-6
+constr_viol_tol           1e-6
+dual_inf_tol              1e-6
+compl_inf_tol             1e-6
+
+* Iteration limits
+max_iter                   3000
+max_cpu_time              300
+
+* Derivative checking
+derivative_test           none
+derivative_test_tol       1e-6
+
+* Hessian approximation
+hessian_approximation     limited-memory
+limited_memory_max_history 10
+
+* Output control
+print_level               3
+print_timing_statistics   yes
+print_info_string         yes
+
+* Restoration phase
+expect_infeasible_problem no
+start_with_resto          no
+
+* Linear solver
+linear_solver             mumps
+
+* Scaling
+nlp_scaling_method        gradient-based
+
+* Watchdog
+watchdog_shortened_iter_trigger 10
+watchdog_trial_iter_max        3
