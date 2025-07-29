@@ -52,8 +52,8 @@ SCALARS
     T_hw_out   'Hot water outlet temperature [K]'      /343.15/
     m_hw       'Hot water mass flow rate [kg/s]'       /100.0/
     T_amb      'Ambient temperature [K]'               /298.15/
-    DT_pinch   'Pinch point temperature difference [K]'/10.0/
-    DT_appr    'Approach temperature difference [K]'   /8.0/
+    DT_pinch   'Pinch point temperature difference [K]'/5.0/
+    DT_appr    'Approach temperature difference [K]'   /5.0/
     eta_pump   'Pump isentropic efficiency [-]'        /0.75/
     eta_turb   'Turbine isentropic efficiency [-]'     /0.80/
     eta_gen    'Generator efficiency [-]'              /0.95/
