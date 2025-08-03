@@ -11,18 +11,19 @@ Both models attempt to implement **PR EOS + Kamath algorithm** with **binary ref
 
 ## 🚨 **CRITICAL ISSUES IDENTIFIED**
 
-### **1. MAJOR: Undefined Variables (Compilation Error)**
+### **1. MAJOR: Dimensional Errors in EOS Parameters**
 
-**❌ FATAL FLAW:**
+**❌ CRITICAL FLAW:**
 ```gams
 EOS(st).. Z(st)**3 + (1-B(st))*Z(st)**2 + (A(st)-3*B(st)**2-2*B(st))*Z(st)
           - (A(st)*B(st)-B(st)**2-B(st)**3) =E= 0;
 ```
 
-**PROBLEM**: Variables `A(st)` and `B(st)` are **NEVER DEFINED** in either model!
-- They define `a(st)` and `b(st)` (lowercase)
-- But use `A(st)` and `B(st)` (uppercase) in equations
-- **This will cause immediate compilation failure**
+**PROBLEM**: **Dimensional inconsistency** in EOS formulation!
+- They define `a(st)` and `b(st)` as dimensional PR constants
+- But use them directly as `A(st)` and `B(st)` in the cubic equation
+- **Missing conversion**: A_pr = a*P/(RT)², B_pr = b*P/(RT)
+- **This gives dimensionally incorrect and wrong results**
 
 **✅ CORRECT APPROACH (Our Model):**
 ```gams
@@ -42,7 +43,7 @@ Kamath_f1(st).. 3*Z(st)**3 + 2*(1-B(st))*Z(st)**2 + (A(st)-3*B(st)**2-2*B(st))*Z
 ```gams
 Kamath_f1(st).. 3*Z(st)**3 + 2*(1-B(st))*Z(st)**2 + (A(st)-3*B(st)**2-2*B(st))*Z(st) =E= 0;
 ```
-Better, but still uses undefined `A(st)` and `B(st)`!
+Better, but still has dimensional errors in A(st) and B(st)!
 
 **✅ CORRECT KAMATH (Our Approach):**
 The Kamath algorithm is for **derivative conditions** to find cubic roots, not for binary selection!
@@ -88,7 +89,8 @@ heat_source_balance.. Q_evap =L= m_hw * 4.18 * (T_hw_in - T_hw_out);
 
 | **ASPECT** | **MODEL 1** | **MODEL 2** | **MONA'S MODEL** | **OUR COMBINED** |
 |------------|-------------|-------------|------------------|------------------|
-| **Variable Definition** | ❌ A,B undefined | ❌ A,B undefined | ✅ Complete | ✅ Complete |
+| **Variable Definition** | ✅ Defined | ✅ Defined | ✅ Complete | ✅ Complete |
+| **Dimensional Correctness** | ❌ Wrong units | ❌ Wrong units | ✅ Correct | ✅ Correct |
 | **Kamath Algorithm** | ❌ Wrong conditions | ✅ Fixed conditions | ✅ Correct | ✅ Correct |
 | **Energy Balances** | ❌ Missing all | ❌ Missing all | ❌ Wrong directions | ✅ Complete |
 | **Work Calculation** | ❌ Hdep only | ❌ Hdep only | ❌ Wrong states | ✅ Full cycle |
@@ -98,7 +100,7 @@ heat_source_balance.. Q_evap =L= m_hw * 4.18 * (T_hw_in - T_hw_out);
 | **Fluid Database** | ⚠️ 5 fluids | ⚠️ 5 fluids | ⚠️ 6 fluids | ✅ 69+ fluids |
 | **Competition Compliance** | ❌ No | ❌ No | ❌ No | ✅ Yes |
 | **Numerical Stability** | ❌ Poor bounds | ❌ Poor bounds | ❌ Unstable | ✅ Excellent |
-| **Expected Convergence** | ❌ Compilation error | ❌ Compilation error | ❌ Infeasible | ✅ Guaranteed |
+| **Expected Convergence** | ❌ Wrong results | ❌ Wrong results | ❌ Infeasible | ✅ Guaranteed |
 
 ---
 
@@ -106,7 +108,7 @@ heat_source_balance.. Q_evap =L= m_hw * 4.18 * (T_hw_in - T_hw_out);
 
 ### **To Make Models Compilable:**
 
-1. **Add Missing Variable Definitions:**
+1. **Add Proper Dimensional Conversion:**
 ```gams
 VARIABLES A_pr(st), B_pr(st);
 
@@ -115,7 +117,9 @@ EQUATIONS A_parameter(st), B_parameter(st);
 A_parameter(st).. A_pr(st) =E= a(st) * P(st) / (R * T(st))^2;
 B_parameter(st).. B_pr(st) =E= b(st) * P(st) / (R * T(st));
 
-* Then replace A(st) with A_pr(st) and B(st) with B_pr(st) everywhere
+* Fix EOS equation sign error:
+EOS(st).. Z(st)**3 - (1-B_pr(st))*Z(st)**2 + (A_pr(st)-3*B_pr(st)**2-2*B_pr(st))*Z(st)
+          - (A_pr(st)*B_pr(st)-B_pr(st)**2-B_pr(st)**3) =E= 0;
 ```
 
 2. **Fix Work Calculation:**
@@ -193,9 +197,9 @@ VARIABLES T(st), P(st);
 ## 📊 **PERFORMANCE EXPECTATIONS**
 
 ### **Classmates' Models:**
-- **Compilation**: ❌ Will fail due to undefined variables
-- **If Fixed**: May converge to unrealistic results
-- **Net Power**: Unknown (likely poor due to fixed conditions)
+- **Compilation**: ✅ Will compile (case insensitive)
+- **Results**: ❌ Dimensionally wrong and unrealistic
+- **Net Power**: Unknown (likely poor due to dimensional errors)
 - **Competition**: ❌ Not compliant with specifications
 
 ### **Our Combined Model:**
