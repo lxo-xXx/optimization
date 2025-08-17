@@ -1,0 +1,12 @@
+% Large-Scale and Distributed Optimization
+\section{Large-Scale, Stochastic, and Distributed Optimization}
+\label{sec:large-scale}
+Large-scale problems demand algorithms with low per-iteration cost, data locality, and parallelism.
+
+\paragraph{Mini-batching and sampling.} Mini-batch gradients balance variance reduction with hardware efficiency. Importance sampling can further accelerate convergence.
+
+\paragraph{Variance-reduced methods.} SVRG/SAGA reduce gradient variance by periodically referencing full gradients, enabling linear convergence under strong convexity.
+
+\paragraph{Distributed methods.} ADMM and distributed proximal gradient exploit separability for data/model parallelism, with communication-efficient synchronization \cite{boyd2011admm}.
+
+\paragraph{System considerations.} Memory bandwidth, cache locality, vectorization, and numerics (e.g., mixed precision) materially affect performance. Robust implementations monitor gradient norms, loss curves, and feasibility metrics.

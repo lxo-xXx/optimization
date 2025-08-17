@@ -1,0 +1,24 @@
+% Discussion and Practitioner Guidelines
+\section{Discussion and Practitioner Guidelines}
+\label{sec:discussion}
+Table~\ref{tab:guidelines} summarizes trade-offs to guide method selection.
+
+\begin{table}[h]
+  \centering
+  \caption{Method selection guidelines (illustrative).}
+  \label{tab:guidelines}
+  \begin{tabular}{@{}llll@{}}
+    \toprule
+    Problem & Recommended methods & Strengths & Caveats \\
+    \midrule
+    Smooth, well-conditioned & GD, Nesterov & Simple, scalable & Sensitive to step size \\
+    Ill-conditioned & L-BFGS, preconditioned GD & Fast convergence & Memory, Hessian-vector products \\
+    Composite (e.g., LASSO) & ISTA/FISTA, proximal L-BFGS & Structure-exploiting & Prox operator must be efficient \\
+    Constrained (convex) & Interior-point, projected gradient & Robust, accurate & Per-iter cost can be high \\
+    Large-scale stochastic & SGD, Adam, SVRG/SAGA & Scalable, parallelizable & Tuning, generalization \\
+    Distributed/decomposable & ADMM, proximal gradient & Decomposition, ADMM flexibility & Communication overhead \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+In practice, initialization, scaling, and diagnostics matter as much as the nominal algorithmic choice. Monitor stationarity, feasibility, and objective trends; adjust step sizes or trust radii; and prefer restart strategies for accelerated methods when oscillations occur.

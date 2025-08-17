@@ -1,0 +1,37 @@
+% Methods
+\section{Algorithms for Unconstrained and Constrained Optimization}
+\label{sec:methods}
+
+\subsection{Deterministic first-order methods}
+\paragraph{Gradient methods.} Gradient descent (GD) updates $x_{k+1}=x_k-\alpha_k\nabla f(x_k)$ with step size $\alpha_k$ determined by line search (e.g., Armijo or Wolfe conditions) or fixed schedules. Momentum (Polyak) and Nesterov acceleration can significantly improve practical convergence, especially for ill-conditioned problems \cite{nesterov2004introductory}.
+
+\paragraph{Coordinate and block methods.} Coordinate descent cycles through coordinates or blocks, minimizing along a subspace at each iteration. For large sparse problems, coordinate updates can be cheap and effective \cite{wright2015coordinate}.
+
+\subsection{Second-order and quasi-Newton methods}
+\paragraph{Newton and trust-region.} Newton's method uses Hessian information; globalization via line search or trust regions yields robust convergence with local quadratic rates near nondegenerate minima \cite{nocedal2006numerical,more1983computing}. For large-scale problems, conjugate gradients solve the Newton step iteratively.
+
+\paragraph{Quasi-Newton.} BFGS and its limited-memory form L-BFGS approximate inverse Hessians from gradient differences, achieving superlinear convergence without forming Hessians \cite{liu1989lbfgs,broyden1970convergence,fletcher1970new,goldfarb1970family,shanno1970conditioning}.
+
+\subsection{Composite and non-smooth optimization}
+\paragraph{Proximal gradient.} For \eqref{eq:composite} with convex $g$, proximal gradient (ISTA) updates $x_{k+1}=\mathrm{prox}_{\alpha_k g}(x_k-\alpha_k\nabla f(x_k))$. Acceleration (FISTA) attains the optimal $\mathcal{O}(1/k^2)$ rate for convex problems \cite{beck2009fista,parikh2014prox}.
+
+\paragraph{Projected and conditional gradient.} With simple constraints $\mathcal{X}$, projected gradient steps onto $\mathcal{X}$; conditional gradient (Frank–Wolfe) avoids projections using linear minimization oracles.
+
+\subsection{Constrained optimization}
+\paragraph{Penalty and augmented Lagrangian.} Exact and inexact penalties trade feasibility and optimality; augmented Lagrangian methods improve conditioning and support decompositions.
+
+\paragraph{Interior-point methods.} Barrier methods solve a sequence of perturbed problems using Newton steps, offering strong polynomial-time guarantees for convex programs and excellent practical performance on structured problems \cite{wright1997primaldual,nesterov1994ipm}.
+
+\subsection{Stochastic and variance-reduced methods}
+\paragraph{SGD and adaptivity.} Stochastic gradient descent scales to massive datasets. Adaptive methods such as AdaGrad, RMSProp, and Adam adjust learning rates per-parameter to mitigate ill-conditioning \cite{duchi2011adagrad,tieleman2012rmsprop,kingma2015adam}.
+
+\paragraph{Variance reduction.} SVRG/SAGA and related methods reduce gradient noise to recover linear convergence in strongly convex regimes while retaining scalability.
+
+\subsection{Implementation considerations}
+\begin{itemize}
+  \item Step-size selection: line search (Armijo/Wolfe) vs. schedules.
+  \item Stopping criteria: gradient norm, stationarity measures, dual gap, and feasibility.
+  \item Preconditioning and scaling for ill-conditioned problems.
+  \item Automatic differentiation and mixed precision.
+  \item Handling nonconvexity: restarts, initialization, and regularization.
+\end{itemize}

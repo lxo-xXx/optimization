@@ -1,0 +1,79 @@
+% Advanced Numerical Optimization — Paper Skeleton
+% Adjust formatting to match AdvPSE_Final_14032.pdf if needed
+\documentclass[12pt]{article}
+
+% --- Encoding & font ---
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext,newtxmath} % Times-like text and math
+\usepackage{microtype}
+
+% --- Page layout ---
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+
+% --- Math & symbols ---
+% amssymb conflicts with newtxmath; remove to avoid \Bbbk redefinition
+\usepackage{amsmath,mathtools}
+\usepackage{siunitx}
+
+% --- Figures, tables, lists ---
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\setlist{nosep}
+
+% --- References ---
+\usepackage[numbers,sort&compress]{natbib}
+\bibliographystyle{plainnat}
+
+% --- Hyperlinks ---
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+\usepackage{cleveref}
+
+% --- Algorithms (optional) ---
+\usepackage[ruled,vlined]{algorithm2e}
+
+% --- Title ---
+\title{Advanced Numerical Optimization: Methods, Algorithms, and Applications}
+\author{Your Name \\ Your Institution \\ \texttt{youremail@example.com}}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We present a cohesive and practice-oriented overview of advanced numerical optimization with a focus on smooth and non-smooth problems, large-scale regimes, and constrained formulations. We cover first- and second-order methods, proximal algorithms for composite objectives, interior-point and augmented Lagrangian techniques for constraints, and modern stochastic and variance-reduced methods. We discuss convergence behavior, globalization strategies, and implementation considerations including line search, trust regions, automatic differentiation, and numerical stability. We synthesize guidance for algorithm selection and provide reproducible experimental protocols to benchmark methods across representative problem classes.
+\end{abstract}
+
+\noindent\textbf{Keywords:} numerical optimization, convex optimization, nonconvex optimization, proximal methods, interior-point methods, stochastic optimization, ADMM
+
+% --- Main matter ---
+\input{sections/introduction}
+\input{sections/background}
+\input{sections/methods}
+\input{sections/convergence}
+\input{sections/large_scale}
+\input{sections/experiments}
+\input{sections/discussion}
+\input{sections/conclusion}
+
+% --- References ---
+\clearpage
+{\small\bibliography{references}}
+
+% --- Appendix (optional) ---
+\clearpage
+\appendix
+\input{sections/appendix}
+
+\end{document}
