@@ -1,0 +1,26 @@
+% Experiments and Protocols
+\section{Experimental Protocols}
+\label{sec:experiments}
+We outline reproducible benchmarks rather than specific task-dependent results, enabling fair comparisons across algorithms and problem classes.
+
+\subsection{Problem suites}
+\begin{itemize}
+  \item Logistic regression with $\ell_2$ and $\ell_1$ regularization (convex)
+  \item LASSO and elastic net (composite)
+  \item Nonnegative matrix factorization (nonconvex)
+  \item Quadratic programs and cone programs (constrained)
+\end{itemize}
+
+\subsection{Metrics}
+Time-to-\emph{target} suboptimality, gradient norm, feasibility and dual residuals (for constrained), iterations, and wall-clock time.
+
+\subsection{Protocols}
+\begin{itemize}
+  \item Fixed random seeds and standardized data splits
+  \item Line-search settings and stopping criteria recorded
+  \item Hyperparameter grids and selection rules pre-registered
+  \item Hardware configuration reported
+\end{itemize}
+
+\subsection{Results placeholder}
+Insert figures and tables here using \texttt{graphicx} and \texttt{booktabs}. For instance, a convergence plot comparing GD, L-BFGS, and FISTA on LASSO, and a table summarizing time-to-target across datasets.

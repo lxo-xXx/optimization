@@ -1,0 +1,15 @@
+% Introduction
+\section{Introduction}
+Optimization is a foundational discipline in applied mathematics, statistics, and computer science. It enables principled decision-making and learning across engineering design, data science, operations research, and artificial intelligence. Modern applications frequently demand methods that scale to millions of variables, accommodate non-smooth or nonconvex objectives, handle constraints, and deliver reliable solutions under tight computational budgets. These needs have spurred a rich ecosystem of optimization algorithms with diverse modeling assumptions and performance trade-offs.
+
+This paper provides a cohesive treatment of advanced numerical optimization with emphasis on:
+\begin{itemize}
+  \item Smooth and composite (smooth + non-smooth) objectives,
+  \item Constrained formulations including convex cones and nonlinear constraints,
+  \item Large-scale and stochastic settings typical in machine learning and signal processing,
+  \item Practical convergence strategies and implementation guidance.
+\end{itemize}
+
+\paragraph{Contributions.} We synthesize core algorithmic families—first- and second-order, proximal and operator-splitting, interior-point and augmented Lagrangian, and stochastic/variance-reduced methods—into a practitioner-oriented guide. We outline globalization techniques for reliability, discuss convergence guarantees where available, and distill decision rules for choosing methods given problem structure and resource constraints. We also describe reproducible experimental protocols suitable for benchmarking.
+
+\paragraph{Organization.} \Cref{sec:background} introduces problem classes, notation, and optimality conditions. \Cref{sec:methods} surveys algorithms for unconstrained and constrained problems, including proximal methods for non-smooth regularizers. \Cref{sec:convergence} covers globalization and convergence. \Cref{sec:large-scale} discusses stochastic, variance reduction, and distributed methods. \Cref{sec:experiments} presents experimental protocols. \Cref{sec:discussion} distills practitioner guidance, and \Cref{sec:conclusion} concludes.

@@ -1,0 +1,21 @@
+% Background and Notation
+\section{Background and Notation}
+\label{sec:background}
+We consider problems of the form
+\begin{equation}
+  \min_{x \in \mathbb{R}^n}~ F(x) := f(x) + g(x) \quad \text{s.t.} \quad x \in \mathcal{X},
+  \label{eq:composite}
+\end{equation}
+where $f$ is differentiable (possibly nonconvex), $g$ is a proper lower semicontinuous function (often convex and possibly non-smooth), and $\mathcal{X}$ encodes constraints. Special cases include unconstrained smooth optimization ($g\equiv 0$, $\mathcal{X}=\mathbb{R}^n$), composite optimization (e.g., $\ell_1$ or nuclear norm regularization), and constrained programs ($\mathcal{X} \neq \mathbb{R}^n$).
+
+\paragraph{Convexity and smoothness.} A function $h$ is $L$-smooth if its gradient is $L$-Lipschitz: $\|\nabla h(x)-\nabla h(y)\|\le L\|x-y\|$. Strong convexity with parameter $\mu>0$ implies $h(y)\ge h(x) + \nabla h(x)^T(y-x) + \tfrac{\mu}{2}\|y-x\|^2$.
+
+\paragraph{Optimality.} For unconstrained smooth problems, stationary points satisfy $\nabla f(x^*)=0$. With constraints and/or non-smooth terms, first-order optimality is characterized by variational inequalities or subdifferentials. For \eqref{eq:composite} with convex $g$, proximal optimality reads $0 \in \nabla f(x^*) + \partial g(x^*) + N_{\mathcal{X}}(x^*)$, where $N_{\mathcal{X}}$ is the normal cone. In constrained smooth optimization, Karush–Kuhn–Tucker (KKT) conditions characterize critical points under constraint qualifications \cite{nocedal2006numerical,bertsekas1999nonlinear,rockafellar1970convex}.
+
+\paragraph{Proximal operator.} For a proper, closed, convex $g$, the proximal operator is
+\begin{equation}
+  \mathrm{prox}_{\lambda g}(v) := \arg\min_{x}~ g(x) + \tfrac{1}{2\lambda}\|x-v\|^2,
+\end{equation}
+which serves as a generalized projection and building block for composite optimization \cite{parikh2014prox,beck2009fista}.
+
+\paragraph{Duality.} Many constrained problems yield tractable duals. Dual ascent, augmented Lagrangians, and ADMM exploit primal–dual structure and often afford decomposition and parallelism \cite{boyd2004convex,boyd2011admm}.

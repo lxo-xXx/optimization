@@ -1,0 +1,10 @@
+% Convergence and Globalization
+\section{Convergence and Globalization Strategies}
+\label{sec:convergence}
+Globalization strategies render local methods reliable from arbitrary starting points. Two standard paradigms are line search and trust regions.
+
+\paragraph{Line search.} Choose $\alpha_k$ to ensure sufficient decrease and curvature conditions (e.g., Armijo or Wolfe) \cite{armijo1966minimization,wolfe1969convergence}. Backtracking is simple and effective; cubic interpolation offers efficiency for expensive objectives.
+
+\paragraph{Trust regions.} Instead of extrapolating, trust-region methods bound the step within a neighborhood where the model is accurate. The trust radius adapts to agreement between model and objective \cite{more1983computing}.
+
+\paragraph{Rates.} For convex, $L$-smooth $f$, GD with constant step $\alpha\le 1/L$ achieves $\mathcal{O}(1/k)$ suboptimality; accelerated methods achieve $\mathcal{O}(1/k^2)$; strongly convex problems admit linear rates. Quasi-Newton methods often achieve superlinear local rates. For nonconvex problems, typical guarantees concern convergence to first-order stationary points \cite{nocedal2006numerical,nesterov2004introductory}.
