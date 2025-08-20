@@ -1,0 +1,314 @@
+  Optimization and Performance Evaluation of Organic Rankine
+      Cycle Configurations Using Various Working Fluids
+                                          Milad Sohrabia, Majid Ahmadianb
+                  a
+                   Student number : 402211297, Msc. Process Design in Chemical Engineering , Sharif university of Technology
+                  b
+                   Student number : 402200694, Msc. Process Design in Chemical Engineering , Sharif university of Technology
+
+
+
+
+Abstract
+
+The Organic Rankine Cycle (ORC) offers a promising solution for converting low-grade heat into electricity
+by utilizing organic fluids with favorable thermodynamic properties. This study explores the impact of
+different working fluids on ORC efficiency across various configurations. Through experimental and
+simulation analyses, the study identifies R142b, FC-72 and dichloromethane as top performers under
+different conditions. Results demonstrate that fluid selection critically influences ORC performance. This
+research underscores the ORC's versatility in enhancing energy efficiency and reducing waste across
+industrial applications.
+Keywords: Rankine Cycle, GAMS, Fluid selection;
+
+
+
+
+ I.    INTRODUCTION
+                                                                         suitable boiling and condensation points relative to
+   The Organic Rankine Cycle (ORC) represents a
+                                                                         the heat source and sink, high thermal stability, low
+significant advancement in power generation
+                                                                         viscosity, and minimal environmental impact.
+technology, leveraging low-grade heat sources for
+                                                                         Additionally, the fluid should exhibit a high
+the production of electricity. Named after its
+                                                                         molecular weight and density, which contribute to
+working principle derived from the conventional
+                                                                         higher cycle efficiency and lower volumetric flow
+Rankine cycle, the ORC differentiates itself by
+                                                                         rates.
+employing      organic fluids      with    favorable
+thermodynamic properties instead of water. This                              Evaluating potential working fluids involves a
+adaptation allows the ORC to efficiently exploit heat                    comprehensive analysis of their thermophysical
+from diverse and typically low-temperature sources,                      properties and compatibility with system
+such as geothermal reservoirs, solar thermal energy,                     components.     Fluids   such      as   refrigerants,
+industrial waste heat, and biomass combustion.                           hydrocarbons, and siloxanes are commonly
+                                                                         considered due to their varied boiling points and
+The selection of an appropriate working fluid is a
+                                                                         thermal properties. Moreover, the environmental and
+critical aspect of optimizing ORC performance. The
+                                                                         safety considerations, such as global warming
+ideal fluid must possess several key characteristics
+to ensure efficiency and safety. These include
+potential (GWP) and flammability, are integral to
+the selection process.
+In summary, the ORC's adaptability to low-
+temperature heat sources and the judicious choice of
+working fluid renders it a versatile and sustainable
+option for enhancing energy efficiency and
+mitigating waste. Continued research and
+development in this field aim to refine fluid
+selection criteria and expand the applicability of
+ORC technology across various industrial sectors.
+Abbas et al. [1] experimentally examined a cascaded              Figure 1. Rankine cycle for Config. A [4]
+two-Organic Rankine Cycle (ORC) system across
+various temperatures and pressures to optimize          In the following, the thermodynamic modeling of
+performance. Cyclopentane was used in the high-         the ORC (Organic Rankine Cycle) is examined. To
+temperature (HT) cycle, while pentane, butane, and      model this cycle using various assumptions, three
+propane were tested in the low-temperature (LT)         different approaches for the thermodynamic
+cycle. Results highlighted that pentane maximized       simulation of the cycle showen in Figure 1.
+heat transfer, absorbing 23 kW, but most heat from
+the HT cycle was not transferred to the LT cycle.
+Yu et al. [2] focuses on optimizing the design and       II.   CONFIGURATION A – APPROACH 1
+operation of a solar energy-driven ORC system
+utilizing a parabolic trough collector and a two-tank     To model the thermodynamics of Figure 1 using
+sensible thermal energy storage system. Results         Approach 1, which is based on obtaining the
+showed that a recuperative ORC significantly            enthalpy of different streams, assumptions include:
+outperforms a basic ORC, with toluene emerging as       the turbine outlet pressure is 1 bar, zero pressure
+the best working fluid despite vacuum condensation      drop for equipment, a minimum temperature
+issues.                                                 approach of 5°C for cycle heat exchangers, an
+Abbas et al. [3] explored the thermal efficiency of a   evaporator outlet temperature of 165°C, purity of
+Cascaded Dual-Organic Rankine Cycle (CD-ORC)            each stream, condenser outlet temperature slightly
+system using alkanes and low-GWP refrigerants           less than the boiling point of the substance, a 1°C
+through simulations with EBSILON@Professional.          temperature increase across the pump, 75% pump
+The analysis revealed that thermal efficiency in the    efficiency, 80% turbine isentropic efficiency, 95%
+HT-ORC is influenced by the critical temperature,       electric motor efficiency, and operational
+molecular mass, and critical pressure of the working    constraints such as the turbine inlet being fully
+fluids, with cyclic alkanes like cyclohexane showing    vapor and the turbine outlet having a steam quality
+superior performance. In the LT-ORC, refrigerants       that can decrease to 90% as mentioned in [2]. The
+with high critical temperatures, such as                specifications of the hot water flow rate are given in
+R1366mzz(Z) and R1233zd(E), achieved the highest        Table 1.
+efficiency. The CD-ORC system demonstrated a
+potential 25% efficiency improvement over regular
+ORC systems.
+                                                                                                𝐴           𝑚√𝑇𝑟               𝑍+(1+√2)𝐵
+                                                                          𝐻𝑅𝑒𝑠 = 𝑅𝑇 (𝑍 − 1 −         (1 +            ) 𝑙𝑛 [                ])    eq.4
+                                                                                               𝐵√8              √𝛼             𝑍+(1−√2)𝐵
+                     Table 1. Waste Water property
+                  Parameter                  Value
+                                                                        Z 3 − (1 − B)Z 2 + (A − 2B − 3B 2 )Z − (AB − B 2 − B 3 ) eq.5
+                Pressure                 10 bara
+                Temperature              170 °C                                                         𝑇
+                                                                                                𝑇𝑟 = 𝑇                                           eq.6
+                Flowrate                 100 kg/s                                                           𝑐
+
+                Composition              Pure Water                                                                              2
+                                                                                       𝛼 = [1 + 𝑚(1 − 𝑇𝑟 0.5 )]                                  eq.7
+   To determine the enthalpy of each stream,
+Equation 1 is used. The actual enthalpy of each                                     𝑚 = 0.375 + 1.54𝜔 − 0.27𝜔2                                   eq.8
+stream includes three to four parameters: the ideal
+gas enthalpy, the residual enthalpy indicating the                                                                   𝑅 2 𝑇𝐶2
+                                                                                         𝑎 = 0.457235                          ∗ 𝛼               eq.9
+deviation from the ideal state, the formation                                                                         𝑃𝐶
+enthalpy which is a constant value for the
+                                                                                                                     𝑅𝑇
+substance, and if the substance is in the liquid                                         𝑏 = 0.077796 𝑃 𝑐                                       eq.10
+                                                                                                                       𝐶
+phase, the enthalpy of vaporization should be added
+to the actual enthalpy.                                                                                 𝑎𝑃
+                                                                                                𝐴 = (𝑅𝑇)2                                       eq.11
+             𝑟𝑒𝑎𝑙        𝑖𝑔        𝑟𝑒𝑠        𝑓𝑜𝑟𝑚        𝑣𝑎𝑝
+         𝐻          =𝐻        +𝐻         +𝐻          +𝐻         𝑒𝑞. 1
+                                                                                                       𝑏𝑃
+                                                                                                𝐵 = 𝑅𝑇                                          eq.12
+If the stream is two-phase, Equation 2 must be used,
+which calculates the enthalpy for saturated vapor
+and liquid, and then the vapor fraction of the stream
+is inserted into the equation to obtain the actual                      Assuming the purity of each stream, by substituting
+enthalpy.                                                               either the temperature or pressure of a stream, other
+    𝐻 = 𝑣𝑎𝑝. 𝑓𝑟𝑎𝑐 ∗ 𝐻 𝑆𝑎𝑡.𝑣𝑎𝑝 + (1 − 𝑣𝑎𝑝. 𝑓𝑟𝑎𝑐) ∗ 𝐻 𝑆𝑎𝑡.𝑙𝑖𝑞 𝑒𝑞. 2       parameters of that stream, such as the fugacity
+                                                                        coefficient (Equations 13 & 14) or the
+To calculate the ideal gas enthalpy of a stream,                        compressibility factor, can be calculated.
+Equation 3 is used. Coefficients a to f are read from
+the Aspen HYSYS software, and by inputting the                                     𝑓𝑜𝑟 𝑝𝑢𝑟𝑒 𝑠𝑦𝑠𝑡𝑒𝑚 → 𝜑 𝑣 = 𝜑 𝑙                                  eq.13
+temperature in Kelvin into Equation 3, the ideal gas
+                                                                                                                𝐴          𝑧+(1−√2)𝐵
+enthalpy (Kj / Kg) is obtained.                                         ln(𝜑) = (𝑧 − 1) − ln(𝑧 − 𝐵) +                 ln (             )        eq.14
+                                                                                                            2𝐵√2           𝑧+(1+√2)𝐵
+
+
+     𝐻 𝑖𝑔 = 𝑎 + 𝑏𝑇 + 𝑐𝑇 2 + 𝑑𝑇 3 + 𝑒𝑇 4 + 𝑓𝑇 5                  𝑒𝑞. 3     To find the molar flow rate of the pure
+                                                                        component in the cycle, Equation 15 is used, which
+   To calculate the second parameter in Equation 1,                     determines the molar flow rate of the component by
+the residual enthalpy, existing EOS 1 are used.                         balancing the energy in the cycle's evaporator.
+Considering the problem's requirements, the PR 2
+equation of state is chosen. Using the relations                                 𝑛̇ (𝐻1 − 𝐻4 ) = 𝑚̇𝑤 𝐶𝑝,𝑤 (∆𝑇 − 5)                          𝑒𝑞. 15
+provided in [5], presented as Equations 4 to 12, the
+desired parameter is calculated. To solve the cubic
+                                                                          Subsequently, the thermodynamic parameters of
+equation in Equation 5, the Kamath method is used.
+                                                                        the mentioned cycle are calculated, and the pump's
+                                                                        required work is determined using Equation 16 &
+                                                                        17. Finally, the turbine's generated work is
+1
+    Equations of State                                                  calculated using Equation 18.
+2
+    Peng Robinson
+                     (𝑃4 − 𝑃3 ) ∗ 𝑛̇ ∗ 𝑀𝑊                   to approximately 94% liquid, and the other
+         ∆𝐻𝑝𝑢𝑚𝑝 =                                  𝑒𝑞. 16   components remain in their gaseous state, the vapor
+                          𝑑𝑒𝑛𝑠𝑖𝑡𝑦
+                                                            fraction of this component is included in the
+                           ∆𝐻𝑝𝑢𝑚𝑝                           equations. Additionally, using Equation 19 [6], the
+               𝑊𝑝𝑢𝑚𝑝 =                             𝑒𝑞. 17   turbine outlet temperature is calculated considering
+                            𝜂𝑝𝑢𝑚𝑝
+                                                            the pressure drop and the K value, which equals
+                                                            𝐶𝑝 /𝐶𝑣 of the component in the ideal state, and the
+             𝑊𝑡𝑢𝑟𝑏𝑖𝑛𝑒 = 𝑛̇ (𝐻1 − 𝐻2 )              𝑒𝑞. 18
+                                                            turbine's isentropic efficiency equal to 80%. The
+  To select among the 74 components listed in the           components used in the Approach 3 are the same as
+provided Excel file, two constraints are applied: the       those in the previous two approaches.
+condenser outlet temperature must be at least 30°C,
+                                                                                            𝑇
+and the selected component must have a boiling                                          1 − 𝑇2
+                                                                                              1
+point lower than water. By applying these                                 𝜂𝑡𝑢𝑟𝑏𝑖𝑛𝑒 =        1−𝑘           𝑒𝑞. 19
+constraints, 15 components listed in Table 2 are                                       1 − 𝜋𝑖 𝑘
+identified as candidates for the best substance for
+this cycle.
+                                                             V.   CONFIGURATION B
+          Table 2. Candidates for best component
+                                                               In the Bonus section of this project, the
+                   Working Fluid                            performance comparison among five components -
+   2,2-dimethylbutane           FC72         R113           isohexane, FC-72, R-113, dichloromethane, and R-
+   4-methyl-2-pentene        Isohexane      Benzene         141b - is conducted. This section follows the
+         Acetone             Methanol       Ethanol         structure shown in Figure 2.
+      Cyclopentane            n-hexane     n-heptane
+    Dichloromethane          n-pentane       R141b
+
+   In this approach, five components -
+dichloromethane, FC-72, methanol, n-heptane, and
+R-113 - are selected.
+
+III.   CONFIGURATION A – APPROACH 2
+
+   In Approach 2, similar to the previous case, the                        Figure 2. Configuration B[4]
+mentioned relations and assumptions are used, with
+the difference that the turbine outlet is assumed to           The assumptions used in this section are similar
+be saturated vapor at 1 bar pressure, ensuring no           to those of Approach 3 in Configuation 1, with the
+liquid forms inside the turbine. Therefore, only the        difference that the pump outlet temperature is
+vapor enthalpy is used, resulting in reduced                considered to be 304.15 K to maintain the 5°C
+generated work. The same components as in                   approach temperature for the middle heat exchanger
+Approach 1 are used in Approach 2.                          in Figure 2. With this assumption, the minimum
+                                                            approach temperature for all candidate components
+IV.    CONFIGURATION A – APPROACH 3                         is met. Also, the UA values are derived from [7]
+                                                            considering the water-organic fluid type, and the
+  In Approach 3, the general relations of the               required area for the cycle's evaporator is
+previous two approaches are used, with the                  determined and substituted into the equations. In
+difference that since only dichloromethane converts         this section, similar to the previous sections, the
+primary task is to calculate the actual enthalpy of                    H4 (Kj/Kmol) -2986405 -2986691        0.01%
+the cycle streams, assuming the turbine inlet stream                   Z factor 1     0.5007   0.5004        0.06%
+is at 165°C and in the saturated vapor state. By                       Z factor liq 2 0.0084  0.00821        2.32%
+calculating the enthalpy of streams 1, 6, 2, 5, and 4
+and using two additional relations compared to the                     Z factor Vap 2 0.9367   0.9367        0.00%
+previous approaches, 20, 21 and 22, the turbine                        Z factor 4     0.1131   0.1117        1.25%
+work, cycle work, and all required parameters are
+determined and calculated.
+                                                                      Additionally, the results for the other two
+                                                                   approaches are presented in Tables 4 and 5.
+                    𝐻6 − 𝐻5 = 𝐻3 − 𝐻2                     𝑒𝑞. 20   Approach 2 achieves an average error percentage of
+                                                                   0.35%, and Approach 3 has an average error
+                                                                   percentage of 0.57%, both yielding reliable and
+        𝑈 ∗ 𝐴 ∗ 𝑓 ∗ 𝐿𝑀𝑇𝐷 = 𝑚̇𝑤 𝐶𝑝,𝑤 (∆𝑇)                  𝑒𝑞. 21   valid results.
+
+                                                                           Table 4. Config.A approach 2 Results
+                 (𝑇𝑖𝑛,𝑤𝑎𝑠𝑡𝑒 −𝑇1 )−(𝑇𝑜𝑢𝑡,𝑤𝑎𝑠𝑡𝑒 −𝑇6 )
+  𝐿𝑀𝑇𝐷 =                                                   eq.22          Spec         Model       HYSYS     Error %
+                             (𝑇𝑖𝑛,𝑤𝑎𝑠𝑡𝑒 −𝑇1 )
+                        ln                                            Wpump (KW)      311.54       312.4      0.28%
+                             (𝑇𝑜𝑢𝑡,𝑤𝑎𝑠𝑡𝑒 −𝑇6 )
+
+                                                                      Wturbine (KW)  20290.6   20255          0.18%
+                                                                      𝑛 (̇ mole/s)    0.8202   0.8218         0.19%
+VI.     RESULTS & DISCUSSION                                          P1 (bar)        13.65    13.657         0.05%
+                                                                      T2 (K)          332.4    332.9          0.15%
+  The results obtained from configuration A-                          T4 (K)           330     329.9          0.03%
+Approach 1 are presented in Table 3. Comparing
+                                                                      H1 (Kj/Kmol) -2932254 -2932304.7        0.00%
+these results with the simulations conducted in
+Aspen HYSYS, it is observed that FC72, with a net                     H2 (Kj/Kmol) -2956995 -2956943.3        0.00%
+work production of 21296 kW, exhibits the highest                     H4 (Kj/Kmol) -2986405 -2986691.3        0.01%
+work output among the candidate components listed                     Z factor 1      0.5007   0.5004         0.06%
+in Table 2. Table 3 also highlights the differences                   Z factor liq 2  0.0084  0.00821         2.32%
+between the results obtained from the model in                        Z factor Vap 2  0.9367 0.9367054        0.00%
+GAMS software and the simulation results from
+                                                                      Z factor 4      0.1131   0.1117         1.25%
+Aspen HYSYS. It is evident that the modeling
+results closely match the HYSYS simulation
+                                                                      Consequently, in the modeling of Approach 2,
+outcomes, with an average error percentage of
+                                                                   FC72 is identified as the selected component with a
+0.32%, showing the results verified and acceptable.
+                                                                   net work production of 18964 kW. However, in
+                                                                   Approach 3, given the assumptions made,
+          Table 3. Config.A approach 1 Results
+                                                                   dichloromethane is determined to be the selected
+          Spec            Model            HYSYS      Error %
+                                                                   component with a net work production of 8029 kW.
+      Wpump (KW)          311.66           312.4      0.24%        The comparison of the results from Approaches 1
+      Wturbine (KW)      22639.9   22616              0.11%        and 2 confirms that components with higher
+      𝑛 (̇ mole/s)        0.8202  0.8212              0.12%        molecular weight and density exhibit superior
+      P1 (bar)            13.65   13.657              0.05%        performance in the Rankine cycle. Furthermore, the
+                                                                   results from Approach 3 indicate that components
+      T2 (K)              332.7    332.9              0.06%
+                                                                   with a vapor fraction less than one, or at their
+      T4 (K)               330     329.9              0.03%
+                                                                   saturation point, perform better in the Rankine cycle
+      H1 (Kj/Kmol)      -2932254 -2932305             0.00%        compared to their superheated state.
+      H2 (Kj/Kmol)      -2959858 -2959825             0.00%
+          Table 5. Config.A approach 3 Results           T6 (K)              328.7977        328.8       0.00%
+          Spec         Model     HYSYS       Error %     H1 (Kj/Kmol)        -329923        -329948      0.01%
+    Wpump (KW)         240.62     242.6      0.82%       Z factor 1           0.6537         0.6535      0.03%
+    Wturbine (KW)      8705.6      8695      0.12%       H6 (Kj/Kmol)        -361905        -362069      0.05%
+    𝑛 (̇ mole/s)       1.3937     1.389      0.34%       Z factor 6           0.0796         0.0853      6.73%
+    P1 (bar)            20.97     20.95      0.10%       H2 (Kj/Kmol)        -336599        -336669      0.02%
+    T2 (K)             312.88     312.4      0.15%       H5 (Kj/Kmol)        -365133        -365242      0.03%
+    T4 (K)               314      313.1      0.29%       H4 (Kj/Kmol)        -362815        -365529      0.74%
+    H1 (Kj/Kmol)       -90083   -90100.7     0.02%       H3 (Kj/Kmol)        -333371        -339842      1.90%
+    H2 (Kj/Kmol)       -96330   -96359.9     0.03%       Wpump (KW)           400.54         399.1       0.36%
+    H4 (Kj/Kmol)      -121951   -122277      0.27%       Wturbine (KW)        9330.12        9351        0.22%
+    Z factor 1         0.7546     0.7549     0.04%
+    Z factor liq 2     0.0026    0.00253     2.81%
+                                                         VII.   CONCLUSION
+    Z factor Vap 2     0.9753   0.975241     0.01%
+    Z factor 4         0.0541   5.28E-02     2.46%
+                                                            The performance evaluation of different working
+                                                         fluids in ORC systems reveals significant insights
+  In examining the results for Configuration B,          into optimizing energy efficiency. The experimental
+presented in Table 6, it is observed that R141b, with    studies and simulations demonstrate that the
+a net work production of 8463 kW, outperforms the        selection of appropriate working fluids, such as
+other candidates listed in Table 2. Comparing the        cyclopentane, FC-72, and dichloromethane, is
+selected component in Approach 3 of Configuration        crucial for maximizing the efficiency of ORC
+A with the results obtained in Configuration B           configurations. The findings show that FC-72
+reveals that dichloromethane in Configuration A          consistently achieved the highest net work output
+performs better than R141b, placing R141b as the         across different approaches, emphasizing the
+second-best component. However, in Configuration         importance of molecular weight and density in fluid
+B, the positions of these two components are             performance. The comparison between various
+reversed. The reason for this is that                    configurations also highlights that fluids exiting the
+dichloromethane exits the turbine at its saturated       turbine in a saturated vapor state perform better than
+vapor temperature, while R141b exits in a                those in a superheated state, due to enhanced
+superheated state, allowing for thermal exchange         thermal exchange capabilities.
+with the pump's discharge stream.
+                                                                               References
+                 Table 6. Config.B Results
+       Spec           Model       HYSYS        Error %   [1] : Wammedh Khider Abbas, Experimental Study of two
+𝑛 (̇ mole/s)          1.3976      1.392         0.40%    cascade.., 2021.
+P1 (bar)             23.4233      23.44         0.07%    [2] : Haoshui Yu, Optimal design and operation, 2021.
+Z factor 2            0.9752      0.9751        0.01%    [3] : Wammedh Khider Abbas, Cascaded dual-loop organic…
+                                                         , 2021.
+T2 (K)               334.5349     333.8         0.22%    [4] : Palma-Flores, O., Flores-Tlacuahuac, A., & Canseco-
+T5 (K)                304.15      304.6         0.15%    Melchor, G. (2015)
+Z factor 5            0.0826      0.0886        6.73%    [5] : Lee, computional method in chemical eng, 2019.
+T4 (K)                303.15      303.1         0.02%    [6] : stlukes-glenrothes.org
+                                                         [7] : biegler & grossmann, systematic methods, 1997.
+Z factor 4            0.0036      0.0038        5.34%
+
