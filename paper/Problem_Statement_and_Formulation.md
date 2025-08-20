@@ -25,12 +25,12 @@ Given data (nominal)
 | Turbine isentropic efficiency | eta_turb | 0.80 | - |
 | Generator efficiency | eta_gen | 0.95 | - |
 
-Working-fluid database (Attachment 1)
-- Each candidate working fluid provides: critical temperature Tc, critical pressure Pc, acentric factor omega, molecular weight MW, and ideal-gas heat capacity coefficients Cp(T) as a polynomial in T.
+Working-fluid properties in MMMMMM.gms (no external database)
+- The model uses a single, fixed working fluid. Its properties (Tc, Pc, omega, MW) are defined as constants in MMMMMM.gms.
+- Heat-capacity treatment follows the code: either Cp(T) coefficients are embedded, or a constant cp_avg is used. The report aligns with that choice and does not assume database screening.
 
 Decision levers (mapped 1:1 to MMMMMM.gms)
 - Operating variables: state temperatures T(s) and pressures P(s) at the cycle points; working-fluid mass flow m_wf.
-- Working-fluid identity: selected from the database based on thermodynamic screening and optimization.
 - Recuperator (Configuration B): internal duty and pinch.
 
 Performance targets
@@ -39,7 +39,7 @@ Performance targets
 - Optionally explore trade-offs (e.g., operating conservatism or environmental preference) with a multi-objective extension.
 
 Thermophysical modeling
-- Property calculations use the Peng–Robinson (PR) equation of state. A stable cubic-root selection consistent with liquid/vapor phases (Kamath-compatible handling) provides compressibility Z and departure functions. Ideal-gas enthalpy is computed from Cp(T) polynomials; total enthalpy is H = H_ideal(T) + H_departure(T,P,Z).
+- Property calculations use the Peng–Robinson (PR) equation of state. A stable cubic-root selection consistent with liquid/vapor phases (Kamath-compatible handling) provides compressibility Z and departure functions. Ideal-gas enthalpy uses the same approach as MMMMMM.gms: Cp(T) polynomials if present in the file, otherwise a constant cp_avg. Total enthalpy is H = H_ideal(T) + H_departure(T,P,Z).
 
 Assumptions
 - Steady state; single working fluid per run; negligible heat losses outside modeled exchangers; pressure drops lumped into equipment where applicable.
@@ -47,7 +47,7 @@ Assumptions
 - Ambient conditions remain fixed for condenser approach evaluation.
 
 Key outputs
-- Net power W_net, thermal efficiency, specific work, working-fluid mass flow, selected fluid, high/low pressures, state temperatures, and (for Configuration B) recuperator duty and internal pinch.
+- Net power W_net, thermal efficiency, specific work, working-fluid mass flow, high/low pressures, state temperatures, and (for Configuration B) recuperator duty and internal pinch. (No fluid selection is reported because the model uses a single fixed fluid.)
 
 Validation note
 - For fair EO–HYSYS comparisons, both models must use matched boundary conditions (source/sink), identical fluid identity and property package, and consistent unit systems. Differences in fluid choice, bounds, or property methods can materially change W_turb and W_net.
@@ -127,7 +127,7 @@ B       = 0.07780 * (R_bar * Tc / Pc)      * P / (R_bar*T)
 Z_vapor  = 1 + B + A*B/(3 + 2*B)
 Z_liquid =     B + A*B/(2 + 3*B)
 
-H_ideal(T) = integral Cp(T) dT from T_ref to T     ; Cp polynomials from DB
+H_ideal(T) = integral Cp(T) dT from T_ref to T     ; Cp per MMMMMM.gms (polynomial or cp_avg)
 H_dep(T,P,Z) = R_spec * T * ( Z - 1 )              ; robust departure form
 H(T,P) = H_ideal(T) + H_dep(T,P,Z)
 ```
@@ -148,7 +148,7 @@ Optional multi-objective extension
 ```
 Maximize  J = W_net - lambda_mass * m_wf - lambda_press * P(3) - lambda_env * EnvPenalty(fluid)
 ```
-- Nonnegative weights encode preferences for lower flow (smaller equipment), lower high-side pressure (operability/safety), and environmentally preferred fluids.
+- Nonnegative weights encode preferences for lower flow (smaller equipment) and lower high-side pressure (operability/safety). If MMMMMM.gms does not include an environmental term (no fluid-switching), omit lambda_env.
 
 Reporting and comparison
 - Present tabulated results for A and B: W_pump, W_turb, W_net, m_wf, selected fluid, key temperatures/pressures. For B, include Q_recup and internal pinch.
