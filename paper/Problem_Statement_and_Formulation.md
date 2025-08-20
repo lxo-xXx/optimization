@@ -26,16 +26,17 @@ Table 1. Source/sink and equipment data (nominal)
 | Turbine isentropic efficiency | eta_turb | 0.80 | - |
 | Generator efficiency | eta_gen | 0.95 | - |
 
-Working-fluid properties (single-fluid model)
-- We consider a single, fixed working fluid. Its thermophysical constants (Tc, Pc, omega, MW) are treated as known. Heat-capacity treatment follows the model: either Cp(T) coefficients are used, or a constant cp_avg is adopted. No fluid screening is assumed in this report.
+Working-fluid candidates and selection (pure fluids)
+- We consider a set of at least five pure working fluids drawn from the recommended list and literature. Thermophysical constants (Tc, Pc, omega, MW) are treated as known for each candidate. Heat-capacity treatment follows the model: Cp(T) polynomials if available, otherwise a constant cp_avg. The optimal fluid is selected within the optimization (or via a screen–then–solve protocol) while ensuring that only one pure fluid is active in each run.
 
 Decision levers
 - Operating variables: state temperatures T(s) and pressures P(s) at the cycle points; working-fluid mass flow m_wf.
+- Working-fluid identity: chosen from the candidate set (exactly one pure fluid active).
 - Recuperator (Configuration B): internal duty and pinch.
 
 Performance targets
 - Maximize net electrical power while satisfying process and thermodynamic constraints.
-- Compare architectures (A vs B) on a like-for-like basis.
+- Primary focus on Configuration A per assignment; Configuration B is treated as an optional extension.
 - Optionally explore trade-offs (e.g., operating conservatism) with a composite objective.
 
 Thermophysical modeling
@@ -67,6 +68,7 @@ Sets and states
 Decision variables
 - T(s) [K], P(s) [bar], Z(s) [-], H_ideal(s) [kJ/kg], H_dep(s) [kJ/kg], H(s) [kJ/kg]
 - m_wf [kg/s], Q_evap [kW], Q_recup [kW], W_pump [kW], W_turb [kW], W_net [kW]
+- Fluid selection dof: either binary indicators y_i (sum_i y_i = 1) for an integrated selection, or an external screening step that activates one pure fluid per run.
 
 Objective (baseline)
 - Maximize net power:
