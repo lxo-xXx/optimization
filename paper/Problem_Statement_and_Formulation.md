@@ -13,6 +13,8 @@ Scope and configurations
 
 Given data (nominal)
 
+Table 1. Source/sink and equipment data (nominal)
+
 | Item | Symbol | Value | Units |
 |---|---|---:|---|
 | Hot-water inlet temperature | T_hw_in | 443.15 | K |
@@ -72,64 +74,62 @@ Decision variables (as declared in MMMMMM.gms)
 Objective (baseline)
 - Maximize net power:
 ```
-W_net = eta_gen * ( W_turb - W_pump )
+W_net = eta_gen * ( W_turb - W_pump )   .......... (eq. 1)
 ```
  - This objective is coded as the net power equation in MMMMMM.gms (see NET POWER block).
 
 Energy balances and duties (equation names in MMMMMM.gms mirror these relations)
 ```
-Q_evap  = m_wf * ( H(3) - H(2) )              ; simple A
-Q_evap  = m_wf * ( H(3) - H(6) )              ; recuperated B
-W_turb  = m_wf * ( H(3) - H(4) )
-W_pump  = m_wf * ( H(2) - H(1) )
+Q_evap  = m_wf * ( H(3) - H(2) )        ; simple A   .......... (eq. 2A)
+Q_evap  = m_wf * ( H(3) - H(6) )        ; recup.  B   .......... (eq. 2B)
+W_turb  = m_wf * ( H(3) - H(4) )                      .......... (eq. 3)
+W_pump  = m_wf * ( H(2) - H(1) )                      .......... (eq. 4)
 
-m_hot * Cp_water * ( T_hw_in - T_hw_out ) >= Q_evap
+m_hot * Cp_water * ( T_hw_in - T_hw_out ) >= Q_evap   .......... (eq. 5)
 ```
 
 Isentropic relations (engineering form)
 - Turbine (3 -> 4):
 ```
-T4s = T3 * ( P4 / P3 )^((k3 - 1)/k3)            ; polytropic ideal-gas approx.
-T4  = T3 - eta_turb * ( T3 - T4s )
+T4s = T3 * ( P4 / P3 )^((k3 - 1)/k3)     ; polytropic approx.
+T4  = T3 - eta_turb * ( T3 - T4s )       .......... (eq. 6)
 ```
 - Pump (1 -> 2):
 ```
 T2s = T1 * ( P2 / P1 )^((k1 - 1)/k1)
-T2  = T1 + ( T2s - T1 ) / eta_pump
+T2  = T1 + ( T2s - T1 ) / eta_pump       .......... (eq. 7)
 ```
 - Here k = cp / (cp - R_spec) and cp(T) is obtained from the derivative of H_ideal(T).
 - Note: A full PR-based isentropic step would use s-const constraints; the above is a robust approximation that preserves units and trends without introducing additional differential relations.
 
 Heat-transfer and pressure-structure constraints
 ```
-T(3) <= T_hw_in - dT_pinch               ; evaporator pinch
-T(1) >= T_cond + dT_approach             ; condenser approach (T_cond from site)
-P(2) =  P(3)                             ; high pressure
-P(1) =  P(4)                             ; low pressure
-P(3) <= alpha_pc * Pc                    ; critical-pressure cap (0 < alpha_pc < 1)
+T(3) <= T_hw_in - dT_pinch               ; evaporator pinch  .......... (eq. 8)
+T(1) >= T_cond + dT_approach             ; condenser approach .......... (eq. 9)
+P(2) =  P(3)                             ; high pressure      .......... (eq.10)
+P(1) =  P(4)                             ; low pressure       .......... (eq.10)
+P(3) <= alpha_pc * Pc                    ; critical-pressure  .......... (eq.11)
 ```
 
 Recuperator constraints (Configuration B)
 ```
-m_wf * ( H(4) - H(5) ) = m_wf * ( H(6) - H(2) )
-T(4) - T(6) >= dT_recup                    ; hot end pinch
-T(5) - T(2) >= dT_recup                    ; cold end pinch
+m_wf * ( H(4) - H(5) ) = m_wf * ( H(6) - H(2) )      .......... (eq.12)
+T(4) - T(6) >= dT_recup  ;  T(5) - T(2) >= dT_recup   .......... (eq.13)
 ```
 
 Thermodynamics: PR EOS and enthalpy model
 ```
-alpha(T) = [ 1 + kappa * ( 1 - sqrt( T / Tc ) ) ]^2
+alpha(T) = [ 1 + kappa * ( 1 - sqrt( T / Tc ) ) ]^2  .......... (eq.14)
 kappa    = 0.37464 + 1.54226*omega - 0.26992*omega^2
 
-A       = 0.45724 * (R_bar^2 * Tc^2 / Pc) * alpha(T) * P / (R_bar*T)^2
-B       = 0.07780 * (R_bar * Tc / Pc)      * P / (R_bar*T)
+A = 0.45724 * (R_bar^2 * Tc^2 / Pc) * alpha(T) * P / (R_bar*T)^2  .......... (eq.15a)
+B = 0.07780 * (R_bar * Tc / Pc)      * P / (R_bar*T)               .......... (eq.15b)
 
-Z_vapor  = 1 + B + A*B/(3 + 2*B)
-Z_liquid =     B + A*B/(2 + 3*B)
+Z_vapor  = 1 + B + A*B/(3 + 2*B) ; Z_liquid = B + A*B/(2 + 3*B)    .......... (eq.16)
 
-H_ideal(T) = integral Cp(T) dT from T_ref to T     ; Cp per MMMMMM.gms (polynomial or cp_avg)
-H_dep(T,P,Z) = R_spec * T * ( Z - 1 )              ; robust departure form
-H(T,P) = H_ideal(T) + H_dep(T,P,Z)
+H_ideal(T) = integral Cp(T) dT from T_ref to T
+H_dep(T,P,Z) = R_spec * T * ( Z - 1 )
+H(T,P) = H_ideal(T) + H_dep(T,P,Z)                                 .......... (eq.17)
 ```
 - Phase consistency: use Z_liquid downstream of condenser/pump, Z_vapor downstream of evaporator/turbine.
 - Units: H in kJ/kg, m_wf in kg/s, hence powers in kW by construction.
@@ -146,11 +146,10 @@ Variable bounds (illustrative; use the same ranges in MMMMMM.gms)
 
 Optional multi-objective extension
 ```
-Maximize  J = W_net - lambda_mass * m_wf - lambda_press * P(3) - lambda_env * EnvPenalty(fluid)
+Maximize  J = W_net - lambda_mass * m_wf - lambda_press * P(3)    .......... (eq.18)
 ```
 - Nonnegative weights encode preferences for lower flow (smaller equipment) and lower high-side pressure (operability/safety). If MMMMMM.gms does not include an environmental term (no fluid-switching), omit lambda_env.
 
 Reporting and comparison
-- Present tabulated results for A and B: W_pump, W_turb, W_net, m_wf, selected fluid, key temperatures/pressures. For B, include Q_recup and internal pinch.
+- Present tabulated results for A and B: W_pump, W_turb, W_net, m_wf, key temperatures/pressures. For B, include Q_recup and internal pinch.
 - When comparing with HYSYS, ensure matched boundary conditions and fluid identity; otherwise, differences in W_turb and W_net are expected.
-
