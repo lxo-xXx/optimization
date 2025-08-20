@@ -1,0 +1,118 @@
+                                    Sharif University of Technology
+                            Department of Chemical and Petroleum Engineering
+                                 Advanced Process Systems Engineering
+                           Final Project                Issue Date:         Khordad 13, 1404
+                    Revision:            00             Due Date:           Mordad 15, 1404
+
+
+     “Heat Recovery Process Optimization” Competition
+Introduction
+Heat recovery is of paramount importance in various industries and sectors due to its numerous
+benefits. The process of capturing and utilizing waste heat not only minimizes energy wastage but
+also reduces greenhouse gas emissions, thereby offering an environmentally friendly solution. By
+implementing heat recovery systems, organizations can significantly enhance their energy
+efficiency and lower operational costs. The recovered heat can be redirected to power generation,
+heating applications, or even utilized for process requirements, thereby reducing the reliance on
+conventional energy sources. Moreover, heat recovery promotes sustainability and resource
+conservation, contributing to a greener and more sustainable future.
+Several heat recovery methods can be employed to capture and utilize waste heat effectively.
+Organic Rankine Cycle (ORC) is a heat recovery solution that utilizes organic fluids to convert
+waste heat into usable energy. It is particularly effective in situations where the waste heat source
+has a low or medium temperature range.
+The ORC process (Figure 1) involves a closed-loop system where an organic fluid, with a lower
+boiling point than water, is used as the working fluid. The waste heat is transferred to the organic
+fluid in a heat exchanger, causing it to vaporize and expand. The expanding vapor drives a turbine,
+which is connected to a generator, producing electricity. After passing through the turbine, the
+vapor is condensed back into liquid form using a cooling system, and then it is pumped back into
+the heat exchanger to repeat the cycle.
+
+
+
+
+                         Figure 1: A typical simple ORC unit (Configuration A) [1]
+
+
+                                                    1
+In order to improve the process efficiency, several ORC configurations have been proposed such
+as the configuration shown in Figure 2).
+
+
+
+
+                        Figure 2: The ORC unit with recuperator (Configuration B) [1]
+
+Problem Statement
+Consider a hot water stream with the specifications shown in Table 1.
+                                Table 1: waste hot water stream specifications
+
+
+
+
+In this study, you are asked to optimize the ORC unit (Configuration A) to maximize the power output of
+the cycle. Assume that an air-cooled condenser is employed in the ORC unit. The input parameters and
+calculation conditions are listed in Table 2.
+                                     Table 2: Process design parameters
+
+
+
+
+Competition assignments
+The class students are asked to be separated into five groups (Table 3).
+Each group must simulate and optimize Configuration A using an equation-oriented approach in
+GAMS. Pure working fluid must be used in the cycles.
+
+
+
+
+                                                      2
+                                       Table 3: Working groups
+
+
+
+
+Each group should incorporate the working fluid selection into the optimization problem. In other
+words, there is no limitation on the working fluid and the optimal working fluid must be selected
+in the process optimization problem. At least five working fluids must be considered in the basis
+set from which the optimal one is selected by the optimizer.
+Each group may gain 30% more score by simulating and optimizing Configuration B likewise.
+The process optimization model must be correct in terms of both process design concepts and
+formulation. The convergence time will be also considered as the measurement of the successful
+formulation.
+The group with the process which yields the highest power output wins the competition (20% more
+score)
+
+Competition Rules
+1- The optimization problem must be formulated in GAMS as an equation-oriented problem
+2- Write a scientific essay in English having the structure below:
+
+   •   Abstract (max 200 words)
+   •   Introduction (max 1500 words)
+   •   Problem statement (max 1000 words)
+   •   Problem formulation (max 1000 words)
+   •   Results and discussions (max 1000 words)
+   •   Conclusions (max 500 words)
+   •   References (min 10 references published from 2010 to date)
+3- Use Peng-Robinson EOS and Kamath algorithm for the property estimation and phase
+calculations
+4- Prepare a RAR package including:
+
+   •   Simulation files (GAMS and Aspen Hysys)
+   •   Essay (in both MS Word and PDF formats)
+   •   References
+   •   Others
+
+
+                                                 3
+5- Use the list attached (Attachment 1) as the database of working fluids and their properties
+6- The attached references (Attachment 2) may be used as the starting point of literature survey
+
+References
+[1] Palma-Flores, O., Flores-Tlacuahuac, A., & Canseco-Melchor, G. (2015). Optimal molecular
+design of working fluids for sustainable low-temperature energy recovery. Computers &
+Chemical Engineering, 72, 334-349.
+
+
+
+
+                                                 4
+
