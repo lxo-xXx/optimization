@@ -1,10 +1,9 @@
-# Problem Statement and Problem Formulation (EO GAMS, PR EOS + Kamath)
+# Problem Statement and Problem Formulation (Equation-Oriented, PR EOS + Kamath)
 
 ## Problem Statement (<= 1000 words)
 
 Objective
-- Convert low- to medium-grade waste heat into electricity using an Organic Rankine Cycle (ORC) under industrially realistic constraints, and formulate the optimization in an equation-oriented (EO) manner suitable for direct solution in GAMS.
-- Implementation reference: the EO model is implemented in the GAMS file "MMMMMM.gms" (all symbols and equations below follow the same naming convention in that file).
+- We aim to convert low- to medium-grade waste heat into electricity using an Organic Rankine Cycle (ORC) under industrially realistic constraints, and to formulate the optimization in an equation-oriented (EO) manner suitable for rigorous solution.
 
 Scope and configurations
 - A single hot-water stream is the heat source. The sink is an air-cooled condenser. Two ORC configurations are analyzed under identical boundary conditions:
@@ -27,47 +26,45 @@ Table 1. Source/sink and equipment data (nominal)
 | Turbine isentropic efficiency | eta_turb | 0.80 | - |
 | Generator efficiency | eta_gen | 0.95 | - |
 
-Working-fluid properties in MMMMMM.gms (no external database)
-- The model uses a single, fixed working fluid. Its properties (Tc, Pc, omega, MW) are defined as constants in MMMMMM.gms.
-- Heat-capacity treatment follows the code: either Cp(T) coefficients are embedded, or a constant cp_avg is used. The report aligns with that choice and does not assume database screening.
+Working-fluid properties (single-fluid model)
+- We consider a single, fixed working fluid. Its thermophysical constants (Tc, Pc, omega, MW) are treated as known. Heat-capacity treatment follows the model: either Cp(T) coefficients are used, or a constant cp_avg is adopted. No fluid screening is assumed in this report.
 
-Decision levers (mapped 1:1 to MMMMMM.gms)
+Decision levers
 - Operating variables: state temperatures T(s) and pressures P(s) at the cycle points; working-fluid mass flow m_wf.
 - Recuperator (Configuration B): internal duty and pinch.
 
 Performance targets
 - Maximize net electrical power while satisfying process and thermodynamic constraints.
 - Compare architectures (A vs B) on a like-for-like basis.
-- Optionally explore trade-offs (e.g., operating conservatism or environmental preference) with a multi-objective extension.
+- Optionally explore trade-offs (e.g., operating conservatism) with a composite objective.
 
 Thermophysical modeling
-- Property calculations use the Peng–Robinson (PR) equation of state. A stable cubic-root selection consistent with liquid/vapor phases (Kamath-compatible handling) provides compressibility Z and departure functions. Ideal-gas enthalpy uses the same approach as MMMMMM.gms: Cp(T) polynomials if present in the file, otherwise a constant cp_avg. Total enthalpy is H = H_ideal(T) + H_departure(T,P,Z).
+- Property calculations use the Peng–Robinson (PR) equation of state. A stable cubic-root selection consistent with liquid/vapor phases (Kamath-compatible handling) provides compressibility Z and departure functions. Ideal-gas enthalpy uses the same approach as the model code: Cp(T) polynomials if present, otherwise a constant cp_avg. Total enthalpy is H = H_ideal(T) + H_departure(T,P,Z).
 
 Assumptions
-- Steady state; single working fluid per run; negligible heat losses outside modeled exchangers; pressure drops lumped into equipment where applicable.
+- Steady state; single working fluid per case; negligible heat losses outside modeled exchangers; pressure drops lumped into equipment where applicable.
 - PR EOS provides adequate accuracy over the operating window; Cp(T) polynomials are valid in the temperature range of interest.
 - Ambient conditions remain fixed for condenser approach evaluation.
 
 Key outputs
-- Net power W_net, thermal efficiency, specific work, working-fluid mass flow, high/low pressures, state temperatures, and (for Configuration B) recuperator duty and internal pinch. (No fluid selection is reported because the model uses a single fixed fluid.)
+- Net power W_net, thermal efficiency, specific work, working-fluid mass flow, high/low pressures, state temperatures, and (for Configuration B) recuperator duty and internal pinch.
 
 Validation note
-- For fair EO–HYSYS comparisons, both models must use matched boundary conditions (source/sink), identical fluid identity and property package, and consistent unit systems. Differences in fluid choice, bounds, or property methods can materially change W_turb and W_net.
- - Practical tip: when reporting or debugging, cite values from MMMMMM.gms run logs (W_turb, W_pump, W_net, Q_evap) to ensure consistency with this section.
+- For fair comparisons against flowsheet simulations, matched boundary conditions (source/sink), identical fluid identity and property package, and consistent unit systems are required. Differences in fluid choice, bounds, or property methods can materially change W_turb and W_net.
 
 ## Problem Formulation (<= 1000 words)
 
 Sets and states
-- Use a four-state numbering for the simple cycle:
+- We use a four-state numbering for the simple cycle:
   - 1: condenser outlet (low pressure, liquid)
   - 2: pump outlet (high pressure, liquid)
   - 3: evaporator outlet (high pressure, vapor)
   - 4: turbine outlet (low pressure, vapor)
-- For the recuperated cycle, add states:
+- For the recuperated cycle, we add two states:
   - 5: recuperator hot outlet (low pressure, cooled vapor)
   - 6: recuperator cold outlet (high pressure, preheated liquid)
 
-Decision variables (as declared in MMMMMM.gms)
+Decision variables
 - T(s) [K], P(s) [bar], Z(s) [-], H_ideal(s) [kJ/kg], H_dep(s) [kJ/kg], H(s) [kJ/kg]
 - m_wf [kg/s], Q_evap [kW], Q_recup [kW], W_pump [kW], W_turb [kW], W_net [kW]
 
@@ -76,9 +73,8 @@ Objective (baseline)
 ```
 W_net = eta_gen * ( W_turb - W_pump )   .......... (eq. 1)
 ```
- - This objective is coded as the net power equation in MMMMMM.gms (see NET POWER block).
 
-Energy balances and duties (equation names in MMMMMM.gms mirror these relations)
+Energy balances and duties
 ```
 Q_evap  = m_wf * ( H(3) - H(2) )        ; simple A   .......... (eq. 2A)
 Q_evap  = m_wf * ( H(3) - H(6) )        ; recup.  B   .......... (eq. 2B)
@@ -134,7 +130,7 @@ H(T,P) = H_ideal(T) + H_dep(T,P,Z)                                 .......... (e
 - Phase consistency: use Z_liquid downstream of condenser/pump, Z_vapor downstream of evaporator/turbine.
 - Units: H in kJ/kg, m_wf in kg/s, hence powers in kW by construction.
 
-Variable bounds (illustrative; use the same ranges in MMMMMM.gms)
+Variable bounds (illustrative)
 ```
 300 <= T(1) <= 370     ; K
 300 <= T(2) <= 390
@@ -148,8 +144,7 @@ Optional multi-objective extension
 ```
 Maximize  J = W_net - lambda_mass * m_wf - lambda_press * P(3)    .......... (eq.18)
 ```
-- Nonnegative weights encode preferences for lower flow (smaller equipment) and lower high-side pressure (operability/safety). If MMMMMM.gms does not include an environmental term (no fluid-switching), omit lambda_env.
+- Nonnegative weights encode preferences for lower flow (smaller equipment) and lower high-side pressure (operability/safety).
 
 Reporting and comparison
-- Present tabulated results for A and B: W_pump, W_turb, W_net, m_wf, key temperatures/pressures. For B, include Q_recup and internal pinch.
-- When comparing with HYSYS, ensure matched boundary conditions and fluid identity; otherwise, differences in W_turb and W_net are expected.
+- We present tabulated results for A and B: W_pump, W_turb, W_net, m_wf, key temperatures/pressures; for B, we also include Q_recup and internal pinch. When comparing with flowsheet simulations, we ensure matched boundary conditions and the same working fluid to avoid misleading differences.
