@@ -1,0 +1,237 @@
+set
+component/1*5/
+propertie/1*8/
+coefficient/1*6/;
+
+
+Parameters
+    Cpw            'Heat Capacity of Water'/4.675/
+    m_waste        'waste water flow'      /100/
+    Tin_waste      'inlet water temp'      /170/
+    Tout_waste     'outlet water temp'     /70/
+    turbine_eff    'tubine efficiency'     /0.8/
+    eff_pump       'pump efficiency'       /0.75/
+    eff_elec_motor 'Generator efficiency'  /0.95/
+*=========================Universal===========================================================================================================*
+    R              'Gas Constant'          /8.314/   
+*=============================================================================================================================================*
+    rho                                    /100000/
+    big_M          'Big-M'                 /100000/
+;
+
+table prop(component,propertie)
+*1   Cyclopentane
+*2   Dichloromethane
+*3  n-pentane
+*4  R113
+*5  R141b
+
+*    TC     PC  Acentric factor MW     TB     density      hform      hvap
+    1       2       3         4       5         6            7          8
+1   511.72  45.828  0.192     70.13   321.151   717.504   -77236.64   27.29
+2   510     60.7    0.199     84.93   312.151   1293.882  -95400      29.55
+3   469.65  33.64   0.25389   72.15   308.154   611.196   -146440     27.4
+4   486.15  33.8    0.245     187.38  318.153   1519.32   -726800     28.45
+5   477.5   42.14   0.2211    116.95  303.154   1221.277  -320950     26.7
+;
+table coeff(component,coefficient)     
+*   a               b           c            d              e              f
+    1               2           3            4              5              6
+1   1.56197E-08    -0.764518    0.00386825  -1.44055E-06    2.31157E-10   -8.26099E-23
+2   0               0.15257     0.000956096 -5.11287E-07    1.23938E-10    0
+3   63.198         -0.0117017   0.0033164   -1.1705E-06     1.99636E-10   -8.66485E-15
+4   0               0.326199    0.000766879 -4.30466E-07    9.21086E-11    0
+5   0               0.207743    0.00112342  -5.30367E-07    1.02107E-10    0
+;
+*******************************Variable********************************************************************************************************
+Variables
+    H1ideal,H1,h1res,a1_1,a2_1,a3_1,zv_1,beta_1,zl_1,cap_a_1,cap_b_1,Tr_1,alpha_1,a_1,phi_vap_1,phi_liq_1
+    H4ideal,H4,h4res,a1_4,a2_4,a3_4,zl_4,cap_a_4,cap_b_4,Tr_4,alpha_4,a_4
+    H2ideal,H2,h_vap2res,h_liq2res,a1_2,a2_2,a3_2,zv_2,cap_a_2,cap_b_2,Tr_2,alpha_2,a_2,beta_2,zl_2,phi_vap_2,phi_liq_2
+    Hideal298,a,b,c,d,e,f,hform,w_net,m,b_uni
+    ;
+    
+
+positive Variables
+    MW,w,hvap,Tc,Pc,density,
+    w_pump,w_turbine,
+    deltah_pump,
+    molar_flow,steam_quality,
+    T1,T2,T4,Tb,
+    P1,P2,P3,
+    sL_1,sV_1,L_1,V_1, 
+    sL_2,sV_2,L_2,V_2
+    ;
+
+
+binary variable
+    y
+    ;
+*----------------------------------------------------------------------------------------------------------------------------------------------*
+                        y.l('4') =1;
+cap_a_1.l = 0.301;      cap_a_2.l = 0.326;     cap_a_4.l = 0.301; 
+cap_b_1.l = 0.0281;     cap_b_2.l = 0.002;     cap_b_4.l = 0.00281;
+Zl_1.l = 0.05;          Zl_2.l = 0.01;         Zl_4.l = 0.05;
+Zv_1.l = 0.7;           Zv_2.l = 0.954;
+P1.l =19;             
+T2.l = 300;             T4.l = 300;  
+   
+P1.lo = 11;              P1.up = 26;
+T2.lo = 300; 
+h2.l=-122292.276-96361.80902;
+*steam_quality.lo=0.94;
+*steam_quality.up=0.95;
+*================================Fixed values===================================================================================================*
+P2.fx=1;         P3.fx = 1;     
+T1.fx = 438.15;  
+
+*********************************macro**********************************************************************************************************
+$macro hideal(a,b,c,d,e,f,T)    a + b*T + C*T**2 + D*T**3 + E*T**4 + F*T**5
+*----------------------------------------------------------------------------------------------------------------------------------------------*
+
+*******************************Equation*********************************************************************************************************
+Equations
+    obj_func,e1,e2,e3,e4,e5,e6,e7,e8,e9,e10,e11,e12,e13,e14,e15,e16,e17,e18,e19,e20,e21,e22,e23,e24,e25,e26,e27,e28,
+    e29,e30,e31,e32,e33,e34,e35,e36,e37,e38,e39,e40,e41,e42,e43,e44,e45,e46,e47,e48,e49,e50,e51,e52,e53,e54,e55,e56,
+    e57,e58,e59,e60,e61,e62,e63,e64,e65,e66,e67,e68,e69,e70,e71,e72,e73,e74,e75,e76,e77,e78,e79,e80,e81,e82,e83,e84
+;
+*================================Objective Function============================================================================================*
+obj_func..  w_net =e= -rho*(V_2*sV_2 + L_2*sL_2)+ W_turbine * eff_elec_motor - w_pump;
+
+*================================Enthalpy  of stream 1====================================================================================================*
+e1..    h1 =e= h1ideal * MW + hform  + h1res;
+e2..    h1ideal =e= hideal(a,b,c,d,e,f,T1)- hideal298;
+e3..    hideal298 =e=  hideal(a,b,c,d,e,f,298.15);
+e4..    h1res =e= R*T1*( (zV_1-1) -(cap_a_1/((cap_b_1*2.8284)+0.001))*(1+m*sqrt(Tr_1)/sqrt(alpha_1+0.001))*log((zV_1+(2.414*cap_b_1))/(zV_1+(-0.414*cap_b_1))));
+
+*================================Peng Robinson Thermodynamic model for stream 1=============================================================================*
+e5..    Tr_1 =e= T1 / (Tc + 0.01);
+e6..    alpha_1 =e= (1 + m * (1 - sqrt(Tr_1)))**2;
+e7..    m =e= 0.37464 + 1.54226 * w - 0.26992 * w**2;
+e8..    a_1 =e= (0.457235 * ((R**2) * (Tc)**2) / (Pc + 0.001)) * alpha_1;
+e9..    b_uni =e= 0.077796 * R * Tc / (Pc + 0.001);
+e10..   cap_a_1 =e= a_1 * P1/ ((R * T1)**2);
+e11..   cap_b_1 =e= b_uni * P1 / (R * T1);
+
+*================================Kamath Method stream 1===============================================================================================*
+e12..   power(zl_1, 3) + a1_1 * power(zl_1, 2) + a2_1 * zl_1 + a3_1 =e= 0;
+e13..   3 * power(zl_1, 2) + 2 * a1_1 * zl_1 + a2_1 =g= 0;
+e14..   6 * zl_1 + 2 * a1_1 =l= big_M*sL_1;
+
+e15..   power(zv_1, 3) + a1_1 * power(zv_1, 2) + a2_1 * zv_1 + a3_1 =e= 0;
+e16..   3 * power(zv_1, 2) + 2 * a1_1 * zv_1 + a2_1 =g= 0;
+e17..   6 * zv_1 + 2 * a1_1 =g= -big_M*sV_1;
+
+e18..   a1_1 =e= -(1 - cap_b_1);
+e19..   a2_1 =e= (cap_a_1 - 2 * cap_b_1 - 3 * cap_b_1**2);
+e20..   a3_1 =e= -(cap_a_1 * cap_b_1 - cap_b_1**2 - cap_b_1**3);
+
+e21..   L_1 + V_1 =e= 1;
+e22..   1 + Sv_1 =g= Beta_1;
+e23..   1 - Sl_1 =l= Beta_1;
+
+e24..   phi_vap_1 =e= exp((zv_1-1)-log(zv_1-cap_b_1)+(cap_a_1/(2*sqrt(2)*cap_b_1))*log((zv_1+(1-sqrt(2))*cap_b_1)/(zv_1+(1+sqrt(2))*cap_b_1)));   
+e25..   phi_liq_1 =e= exp((zl_1-1)-log(zl_1-cap_b_1)+(cap_a_1/(2*sqrt(2)*cap_b_1))*log((zl_1+(1-sqrt(2))*cap_b_1)/(zl_1+(1+sqrt(2))*cap_b_1)));
+e26..   phi_liq_1 =e= phi_vap_1;
+
+*================================Enthalpy of stream 4====================================================================================================*
+e27..   h4 =e= h4ideal * MW + hform  + h4res + hvap;
+e28..   h4ideal =e= hideal(a,b,c,d,e,f,T4)- hideal298;
+e29..   h4res =e= R*T4*( (zl_4-1) -(cap_a_4/((cap_b_4*2.8284)+0.001))*(1+m*sqrt(Tr_4)/sqrt(alpha_4+0.001))*log((zl_4+(2.414*cap_b_4))/(zl_4+(-0.414*cap_b_4))));
+
+*================================Kamath Method of stream 4===============================================================================================*
+e30..   Tr_4 =e= T4 / (Tc + 0.01);
+e31..   alpha_4 =e= (1 + m * (1 - sqrt(Tr_4)))**2;
+e32..   a_4 =e= (0.457235 * ((R**2) * (Tc)**2) / (Pc + 0.001)) * alpha_4;
+e33..   cap_a_4 =e= a_4 * P1/ ((R * T4)**2);
+e34..   cap_b_4 =e= b_uni * P1 / (R * T4);
+
+e35..   a1_4 =e= -(1 - cap_b_4);
+e36..   a2_4 =e= (cap_a_4 - 2 * cap_b_4 - 3 * cap_b_4**2);
+e37..   a3_4 =e= -(cap_a_4 * cap_b_4 - cap_b_4**2 - cap_b_4**3);
+
+e38..   power(zl_4, 3) + a1_4 * power(zl_4, 2) + a2_4 * zl_4 + a3_4 =e= 0;
+e39..   3 * power(zl_4, 2) + 2 * a1_4 * zl_4 + a2_4 =g= 0;
+e40..   6 * zl_4 + 2 * a1_4 =l= 0;
+
+*================================Pump and Turbine Equation=====================================================================================*
+e41..   T4 =E= Tb + 1;
+e42..   molar_flow * (H1 - H4) =e= m_waste * Cpw * (Tin_waste - Tout_waste - 5);
+
+e43..   deltah_pump =e= (P1*100 - P3*100) * (molar_flow * mw) / (density + 0.001);
+e44..   w_pump =e= deltah_pump / eff_pump;
+
+e45..   w_turbine =e= molar_flow  *  (H1 - H2);
+
+*================================Enthalpy of stream 2====================================================================================================*
+e46..   h2 =e= steam_quality*(h2ideal * MW + hform  + h_vap2res)+(1 - steam_quality)*(h2ideal * MW + hform  + hvap + h_liq2res);
+e47..   h2ideal =e= hideal(a,b,c,d,e,f,T2)- hideal298;
+e48..   h_vap2res =e= R*T2*( (zV_2-1) -(cap_a_2/((cap_b_2*2.8284)))*(1+m*sqrt(Tr_2)/sqrt(alpha_2+0.01))*log((zV_2+(2.414*cap_b_2))/(zV_2+(-0.414*cap_b_2))));
+e49..   h_liq2res =e= R*T2*( (zl_2-1) -(cap_a_2/((cap_b_2*2.8284)))*(1+m*sqrt(Tr_2)/sqrt(alpha_2+0.01))*log((zl_2+(2.414*cap_b_2))/(zl_2+(-0.414*cap_b_2))));
+
+*================================Kamath Method of stream 2===============================================================================================*
+e50..   Tr_2 =e= T2 / (Tc + 0.01);
+e51..   alpha_2 =e= (1 + m * (1 - sqrt(Tr_2)))**2;
+e52..   a_2 =e= (0.457235 * ((R**2) * (Tc)**2) / (Pc + 0.001)) * alpha_2;
+e53..   cap_a_2 =e= a_2 * P2/ ((R * T2)**2);
+e54..   cap_b_2 =e= b_uni * P2 / (R * T2);
+
+e55..   a1_2 =e= -(1 - cap_b_2);
+e56..   a2_2 =e= (cap_a_2 - 2 * cap_b_2 - 3 * cap_b_2**2);
+e57..   a3_2 =e= -(cap_a_2 * cap_b_2 - cap_b_2**2 - cap_b_2**3);
+
+e58..   power(zV_2, 3) + a1_2 * power(zV_2, 2) + a2_2 * zV_2 + a3_2 =e= 0;
+e59..   3 * power(zV_2, 2) + 2 * a1_2 * zV_2 + a2_2 =g= 0;
+e60..   6 * zV_2 + 2 * a1_2 =g= -big_M*sV_2;
+
+e61..   power(zl_2, 3) + a1_2 * power(zl_2, 2) + a2_2 * zl_2 + a3_2 =e= 0;
+e62..   3 * power(zl_2, 2) + 2 * a1_2 * zl_2 + a2_2 =g= 0;
+e63..   6 * zl_2 + 2 * a1_2 =l= big_M*sL_2;
+
+e64..   L_2 + V_2 =e= 1;
+e65..   1 + Sv_2 =g= Beta_2;
+e66..   1 - Sl_2 =l= Beta_2;
+
+e67..   phi_vap_2 =e= exp((zv_2-1)-log(zv_2-cap_b_2)+(cap_a_2/(2*sqrt(2)*cap_b_2))*log((zv_2+(1-sqrt(2))*cap_b_2)/(zv_2+(1+sqrt(2))*cap_b_2)));   
+e68..   phi_liq_2 =e= exp((zl_2-1)-log(zl_2-cap_b_2)+(cap_a_2/(2*sqrt(2)*cap_b_2))*log((zl_2+(1-sqrt(2))*cap_b_2)/(zl_2+(1+sqrt(2))*cap_b_2)));
+e69..   phi_liq_2 =e= phi_vap_2;
+
+*================================Component Selection============================================================================================*
+e70..   sum(component, y(component)) =e= 1;
+e71..   sum(component, y(component)*coeff(component,'1')) =e= a;
+e72..   sum(component, y(component)*coeff(component,'2')) =e= b;
+e73..   sum(component, y(component)*coeff(component,'3')) =e= c;
+e74..   sum(component, y(component)*coeff(component,'4')) =e= d;
+e75..   sum(component, y(component)*coeff(component,'5')) =e= e;
+e76..   sum(component, y(component)*coeff(component,'6')) =e= f;
+e77..   sum(component, y(component)*prop(component,'4'))  =e= MW;
+e78..   sum(component, y(component)*prop(component,'7'))  =e= hform;
+e79..   sum(component, y(component)*prop(component,'8'))  =e= hvap;
+e80..   sum(component, y(component)*prop(component,'3'))  =e= w;
+e81..   sum(component, y(component)*prop(component,'1'))  =e= Tc;
+e82..   sum(component, y(component)*prop(component,'2'))  =e= Pc;
+e83..   sum(component, y(component)*prop(component,'6'))  =e= density;
+e84..   sum(component, y(component)*prop(component,'5'))  =e= Tb;  
+
+
+model PR /all/;
+
+solve PR using minlp max w_net;
+
+DISPLAY t1.l,t2.l,t4.l,p1.l,p2.l,p3.l,w_pump.l,y.l,w_turbine.L,H1.L,H2.L,H4.L,molar_flow.L ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
