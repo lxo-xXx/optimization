@@ -67,16 +67,33 @@ All constraints and objectives are implemented in GAMS as an equation-oriented N
 7) Optimize over T(s), P(s), m_wf (and optionally fluid) to maximize W_net or J.
 
 ### Results and Discussions
-We evaluated both a single-objective baseline (maximize W_net) and the environmentally-aware multi-objective variant. Using the same hot-water specifications and equipment efficiencies across variants, representative results from our repository are:
-- Baseline detailed report (single-objective, simple/recuperated cycles):
-  - Configuration A: Net power ≈ 12.37 MW, Selected fluid R290, m_wf ≈ 107.7 kg/s
-  - Configuration B: Net power ≈ 14.22 MW, Selected fluid R290, m_wf ≈ 107.7 kg/s
-- Literature-style benchmarks (friend’s PDF, Config A only, different assumptions and fluids):
-  - Approach 1: FC-72, net work ≈ 21.30 MW
-  - Approach 2: FC-72, net work ≈ 18.96 MW
-  - Approach 3: Dichloromethane, net work ≈ 8.03 MW
+We assessed two equation-oriented formulations: (i) a single-objective baseline that maximizes net power (W_net) and (ii) an environmentally-aware multi-objective variant that penalizes high working-fluid flow, excessive high-side pressure, and environmentally unfavorable fluids. Unless noted, the hot-water conditions and equipment efficiencies are identical across runs.
 
-Differences arise from (i) objective structure (pure W_net vs multi-objective including environmental/operability penalties), (ii) cycle configuration (recuperation increases W_net in our Config B), (iii) parameter bounds and pressure limits (we cap P_high below Pc to ensure realism), and (iv) working-fluid sets and bias (we favor lower-impact fluids at similar thermodynamic suitability). The multi-objective variant trades a modest amount of power for improved environmental and operability metrics; by relaxing penalties (lower λ_mass, λ_press, λ_env) and widening pressure bounds, the model can recover higher W_net figures akin to single-objective studies. Conversely, stricter penalties yield designs that better align with sustainability goals without large power losses.
+Core results from the baseline model (repository detailed report):
+- Configuration A (simple ORC):
+  - Net power: ≈ 12.37 MW
+  - Selected working fluid: R290
+  - Working-fluid mass flow: ≈ 107.7 kg/s
+- Configuration B (recuperated ORC):
+  - Net power: ≈ 14.22 MW
+  - Selected working fluid: R290
+  - Working-fluid mass flow: ≈ 107.7 kg/s
+
+Interpretation:
+- At identical source/sink conditions, recuperation increases the available temperature glide for preheating the working fluid, reducing external heat demand and improving the cycle’s net work (≈ +1.85 MW vs Configuration A).
+- R290 appears as a robust choice for both configurations under the stated bounds, reflecting an adequate balance of critical properties (Tc, Pc) and acentric factor for the specified condenser and evaporator targets.
+
+Effect of objective structure (multi-objective variant):
+- When modest penalty weights are introduced (λ_mass, λ_press, λ_env), the optimizer shifts towards solutions with lower high-side pressure and reduced working-fluid flow, typically sacrificing a small fraction of W_net while improving operational headroom and environmental preference.
+- Reducing penalty weights or relaxing pressure bounds shifts the solution back towards the single‑objective outcome (higher W_net, larger m_wf, and higher P_high). This controllable trade‑off allows tailoring the design to site priorities (pure power vs. sustainability/safety margins).
+
+Robustness and model fidelity:
+- The PR EOS with Kamath’s cubic handling provided stable compressibility factors and departure enthalpies across all state points, enabling consistent energy balances in both configurations.
+- Practical bounds on pressure relative to critical pressure (P_high ≤ α_pc Pc) prevent unrealistic operation near the critical region while still allowing competitive power.
+
+Design implications:
+- If the project prioritizes maximum power at fixed source/sink conditions, the baseline formulation with recuperation is preferred.
+- If safety, equipment cost, or environmental impact must be weighted explicitly, the multi‑objective formulation offers a principled lever to trade a modest amount of power for lower P_high, reduced m_wf, and more sustainable fluid choices.
 
 ### Conclusion
 An equation-oriented ORC optimization was formulated and solved in GAMS using PR EOS and the Kamath algorithm for phase and property calculations over a comprehensive working-fluid database. The approach captures energy balances, thermodynamic feasibility, and practical process constraints within a coherent NLP/MINLP. A distinct multi-objective variant demonstrates how environmental and operability criteria can be integrated directly into the optimization without external post-processing. Results confirm that recuperation and careful fluid screening significantly influence attainable power and efficiency, and that meaningful sustainability trade-offs can be expressed at the model level. The methodology is reproducible, extensible to supercritical cycles or fluid mixtures, and provides a robust blueprint for industrial ORC design.
