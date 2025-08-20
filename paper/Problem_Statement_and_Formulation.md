@@ -70,63 +70,74 @@ Decision variables
 
 Objective (baseline)
 - Maximize net power:
-```
-W_net = eta_gen * ( W_turb - W_pump )   .......... (eq. 1)
-```
+$$
+W_{net} = \eta_{gen}\,\big( W_{turb} - W_{pump} \big) \quad (1)
+$$
 
 Energy balances and duties
-```
-Q_evap  = m_wf * ( H(3) - H(2) )        ; simple A   .......... (eq. 2A)
-Q_evap  = m_wf * ( H(3) - H(6) )        ; recup.  B   .......... (eq. 2B)
-W_turb  = m_wf * ( H(3) - H(4) )                      .......... (eq. 3)
-W_pump  = m_wf * ( H(2) - H(1) )                      .......... (eq. 4)
-
-m_hot * Cp_water * ( T_hw_in - T_hw_out ) >= Q_evap   .......... (eq. 5)
-```
+$$
+Q_{evap} = \dot{m}_{wf}\,\big(H_3 - H_2\big) \quad \text{(simple A)} \quad (2a)
+$$
+$$
+Q_{evap} = \dot{m}_{wf}\,\big(H_3 - H_6\big) \quad \text{(recuperated B)} \quad (2b)
+$$
+$$
+W_{turb} = \dot{m}_{wf}\,\big(H_3 - H_4\big) \quad (3)
+$$
+$$
+W_{pump} = \dot{m}_{wf}\,\big(H_2 - H_1\big) \quad (4)
+$$
+$$
+\dot{m}_{hot}\,C_{p,water}\,(T_{hw,in} - T_{hw,out}) \ge Q_{evap} \quad (5)
+$$
 
 Isentropic relations (engineering form)
 - Turbine (3 -> 4):
-```
-T4s = T3 * ( P4 / P3 )^((k3 - 1)/k3)     ; polytropic approx.
-T4  = T3 - eta_turb * ( T3 - T4s )       .......... (eq. 6)
-```
+$$
+T_{4s} = T_3\,\Big( \tfrac{P_4}{P_3} \Big)^{\frac{k_3-1}{k_3}},\quad T_4 = T_3 - \eta_{turb}\,\big(T_3 - T_{4s}\big) \quad (6)
+$$
 - Pump (1 -> 2):
-```
-T2s = T1 * ( P2 / P1 )^((k1 - 1)/k1)
-T2  = T1 + ( T2s - T1 ) / eta_pump       .......... (eq. 7)
-```
+$$
+T_{2s} = T_1\,\Big( \tfrac{P_2}{P_1} \Big)^{\frac{k_1-1}{k_1}},\quad T_2 = T_1 + \frac{T_{2s} - T_1}{\eta_{pump}} \quad (7)
+$$
 - Here k = cp / (cp - R_spec) and cp(T) is obtained from the derivative of H_ideal(T).
 - Note: A full PR-based isentropic step would use s-const constraints; the above is a robust approximation that preserves units and trends without introducing additional differential relations.
 
 Heat-transfer and pressure-structure constraints
-```
-T(3) <= T_hw_in - dT_pinch               ; evaporator pinch  .......... (eq. 8)
-T(1) >= T_cond + dT_approach             ; condenser approach .......... (eq. 9)
-P(2) =  P(3)                             ; high pressure      .......... (eq.10)
-P(1) =  P(4)                             ; low pressure       .......... (eq.10)
-P(3) <= alpha_pc * Pc                    ; critical-pressure  .......... (eq.11)
-```
+$$
+T_3 \le T_{hw,in} - \Delta T_{pinch} \quad (8)
+$$
+$$
+T_1 \ge T_{cond} + \Delta T_{approach} \quad (9)
+$$
+$$
+P_2 = P_3,\quad P_1 = P_4 \quad (10)
+$$
+$$
+P_3 \le \alpha_{pc}\,P_c \quad (11)
+$$
 
 Recuperator constraints (Configuration B)
-```
-m_wf * ( H(4) - H(5) ) = m_wf * ( H(6) - H(2) )      .......... (eq.12)
-T(4) - T(6) >= dT_recup  ;  T(5) - T(2) >= dT_recup   .......... (eq.13)
-```
+$$
+\dot{m}_{wf}\,\big(H_4 - H_5\big) = \dot{m}_{wf}\,\big(H_6 - H_2\big) \quad (12)
+$$
+$$
+T_4 - T_6 \ge \Delta T_{recup},\quad T_5 - T_2 \ge \Delta T_{recup} \quad (13)
+$$
 
 Thermodynamics: PR EOS and enthalpy model
-```
-alpha(T) = [ 1 + kappa * ( 1 - sqrt( T / Tc ) ) ]^2  .......... (eq.14)
-kappa    = 0.37464 + 1.54226*omega - 0.26992*omega^2
-
-A = 0.45724 * (R_bar^2 * Tc^2 / Pc) * alpha(T) * P / (R_bar*T)^2  .......... (eq.15a)
-B = 0.07780 * (R_bar * Tc / Pc)      * P / (R_bar*T)               .......... (eq.15b)
-
-Z_vapor  = 1 + B + A*B/(3 + 2*B) ; Z_liquid = B + A*B/(2 + 3*B)    .......... (eq.16)
-
-H_ideal(T) = integral Cp(T) dT from T_ref to T
-H_dep(T,P,Z) = R_spec * T * ( Z - 1 )
-H(T,P) = H_ideal(T) + H_dep(T,P,Z)                                 .......... (eq.17)
-```
+$$
+\alpha(T) = \big[ 1 + \kappa\,(1 - \sqrt{T/T_c}) \big]^2,\quad \kappa = 0.37464 + 1.54226\,\omega - 0.26992\,\omega^2 \quad (14)
+$$
+$$
+A = 0.45724\,\frac{R_{bar}^2\,T_c^2}{P_c}\,\alpha(T)\,\frac{P}{(R_{bar}T)^2},\quad B = 0.07780\,\frac{R_{bar}T_c}{P_c}\,\frac{P}{R_{bar}T} \quad (15)
+$$
+$$
+Z_{v} = 1 + B + \frac{A B}{3 + 2B},\quad Z_{l} = B + \frac{A B}{2 + 3B} \quad (16)
+$$
+$$
+H_{ideal}(T) = \int_{T_{ref}}^{T} C_p(T)\,dT,\quad H_{dep} = R_{spec} T (Z - 1),\quad H = H_{ideal} + H_{dep} \quad (17)
+$$
 - Phase consistency: use Z_liquid downstream of condenser/pump, Z_vapor downstream of evaporator/turbine.
 - Units: H in kJ/kg, m_wf in kg/s, hence powers in kW by construction.
 
@@ -141,9 +152,9 @@ Variable bounds (illustrative)
 ```
 
 Optional multi-objective extension
-```
-Maximize  J = W_net - lambda_mass * m_wf - lambda_press * P(3)    .......... (eq.18)
-```
+$$
+\max\ J = W_{net} - \lambda_{mass}\,\dot{m}_{wf} - \lambda_{press}\,P_3 \quad (18)
+$$
 - Nonnegative weights encode preferences for lower flow (smaller equipment) and lower high-side pressure (operability/safety).
 
 Reporting and comparison
