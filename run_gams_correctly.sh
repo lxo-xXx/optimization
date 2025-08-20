@@ -20,6 +20,10 @@ echo "✅ Running Complete Analysis (Both Configurations)..."
 gams run_both_configurations.gms
 echo ""
 
+echo "✅ Running Distinct Variant: Environmentally-Aware Multi-Objective ORC..."
+gams orc_env_multiobjective.gms
+echo ""
+
 echo "=========================================="
 echo "IMPORTANT: Do NOT run these broken files:"
 echo "❌ run_optimization.gms"
@@ -30,4 +34,5 @@ echo "✅ ONLY use these corrected files:"
 echo "✅ orc_standalone_config_a.gms"
 echo "✅ orc_standalone_config_b.gms"
 echo "✅ run_both_configurations.gms"
+echo "✅ orc_env_multiobjective.gms (distinct variant)"
 echo "=========================================="

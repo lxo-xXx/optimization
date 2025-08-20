@@ -39,10 +39,12 @@ The project optimizes ORC systems to maximize power output from a waste hot wate
 - `orc_config_b.gms` - Configuration B with recuperator
 - `orc_simplified_config_a.gms` - Simplified working model for testing
 - `run_optimization.gms` - Master script to run both configurations
+- `orc_env_multiobjective.gms` - Distinct variant: environmental multi-objective with added constraints
 
 ### Documentation
 - `Heat_Recovery_Process_Optimization_Essay.md` - Scientific essay (competition requirement)
 - `README.md` - This file
+ - `DISTINCT_METHOD_NOTES_FA.md` - Summary of distinct changes for your submission
 
 ## Mathematical Formulation
 
@@ -100,6 +102,14 @@ W_net = η_gen × W_turb - W_pump
    - `orc_enhanced_config_a.gms` - Original enhanced model
    - `orc_config_b.gms` - Original Configuration B
    - `run_optimization.gms` - Original master script
+
+5. **Distinct Variant (New)**:
+   ```
+   gams orc_env_multiobjective.gms
+   ```
+   - Composite objective: maximize power minus environmental/equipment penalties
+   - Added robustness constraints: pressure ratio and superheat margin
+   - Prefers low-impact fluids when thermodynamics are comparable
 
 ### Expected Runtime
 - Simple models: 1-3 minutes
@@ -164,7 +174,7 @@ The recuperator configuration shows:
 ## Future Enhancements
 
 Potential extensions of this work:
-1. **Multi-objective optimization** (power, cost, environmental impact)
+1. **Multi-objective optimization** (power, cost, environmental impact) — implemented in `orc_env_multiobjective.gms`
 2. **Dynamic operation optimization** (varying heat source conditions)
 3. **Supercritical ORC cycles** (higher temperature applications)
 4. **Working fluid mixtures** (enhanced thermodynamic properties)
@@ -176,4 +186,4 @@ For questions about this implementation or competition submission, please contac
 
 ## References
 
-See the scientific essay (`Heat_Recovery_Process_Optimization_Essay.md`) for complete references and detailed technical discussion. 
+See the scientific essay (`Heat_Recovery_Process_Optimization_Essay.md`) for complete references and detailed technical discussion.

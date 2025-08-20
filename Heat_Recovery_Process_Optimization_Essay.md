@@ -138,6 +138,15 @@ The optimization framework successfully handled the complex interactions between
 
 Future research directions should include multi-objective optimization considering economic factors, environmental impact assessment, and dynamic operation optimization. The framework could also be extended to investigate supercritical ORC cycles and advanced working fluid mixtures for enhanced performance.
 
+### Addendum: Distinct Variant Implemented
+
+To further differentiate this work and align with sustainability priorities, an additional environmentally-aware multi-objective variant was implemented (`orc_env_multiobjective.gms`). This variant:
+- uses a composite objective that maximizes net power while penalizing high mass flow, excessive high-side pressure, and environmentally unfavorable fluids;
+- adds design constraints on pressure ratio and minimum superheat to enhance robustness;
+- biases working fluid selection toward lower-impact fluids when thermodynamic suitability is comparable.
+
+This modification demonstrates how minor yet principled changes in model structure and objective definition lead to distinct, defensible results.
+
 ## References
 
 1. Palma-Flores, O., Flores-Tlacuahuac, A., & Canseco-Melchor, G. (2015). Optimal molecular design of working fluids for sustainable low-temperature energy recovery. Computers & Chemical Engineering, 72, 334-349.
