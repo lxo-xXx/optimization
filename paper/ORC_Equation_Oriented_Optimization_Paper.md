@@ -86,9 +86,11 @@ An equation-oriented ORC optimization was formulated and solved in GAMS using PR
 [2] Quoilin, S., Van Den Broek, M., Declaye, S., Dewallef, P., & Lemort, V. (2013). Techno-economic survey of Organic Rankine Cycle (ORC) systems. Renewable and Sustainable Energy Reviews, 22, 168–186.
 [3] Toffolo, A., Lazzaretto, A., Manente, G., & Paci, M. (2014). A multi-criteria approach for the optimal selection of working fluid and design parameters in ORC systems. Applied Energy, 121, 219–232.
 [4] Macchi, E., & Astolfi, M. (2016). Organic Rankine Cycle (ORC) Power Systems: Technologies and Applications. Woodhead Publishing.
-[5] Lee, J. (2019). Computational methods in chemical engineering. (PR EOS and cubic EOS solution strategies.)
-[6] Kamath, V. (1988). Efficient calculation of compressibility factors for cubic EOS (method description used widely in process simulators).
-[7] Saleh, B., Koglbauer, G., Wendland, M., & Fischer, J. (2007). Working fluids for low-temperature ORCs. Energy, 32(7), 1210–1221.
-[8] Hung, T. C., Shai, T. Y., & Wang, S. K. (1997). ORCs for recovery of low-grade heat. Energy, 22(7), 661–667.
-[9] Wang, E. H., Zhang, H. G., Fan, B. Y., Ouyang, M. G., Zhao, Y., & Mu, Q. H. (2011). Working fluid selection for engine waste-heat ORC. Energy, 36(5), 3406–3418.
-[10] Lecompte, S., Huisseune, H., van den Broek, M., Vanslambrouck, B., & De Paepe, M. (2015). Review of ORC architectures for waste heat recovery. Renewable and Sustainable Energy Reviews, 47, 448–461.
+[5] Wang, E. H., Zhang, H. G., Fan, B. Y., Ouyang, M. G., Zhao, Y., & Mu, Q. H. (2011). Study of working fluid selection of ORC for engine waste heat recovery. Energy, 36(5), 3406–3418.
+[6] Bao, J., & Zhao, L. (2013). A review of working fluid and expander selections for organic Rankine cycle. Renewable and Sustainable Energy Reviews, 24, 325–342.
+[7] Lecompte, S., Huisseune, H., van den Broek, M., Vanslambrouck, B., & De Paepe, M. (2015). Review of ORC architectures for waste heat recovery. Renewable and Sustainable Energy Reviews, 47, 448–461.
+[8] Chen, H., Goswami, D. Y., & Stefanakos, E. K. (2010). A review of thermodynamic cycles and working fluids for the conversion of low-grade heat. Renewable and Sustainable Energy Reviews, 14(9), 3059–3067.
+[9] Vélez, F., Segovia, J. J., Martín, M. C., Antolín, G., Chejne, F., & Quijano, A. (2012). A technical, economic and market review of ORC for power generation from low-grade heat sources. Renewable and Sustainable Energy Reviews, 16, 4175–4189.
+[10] Tchanche, B. F., Lambrinos, G., Frangoudakis, A., & Papadakis, G. (2011). Low-grade heat conversion into power using ORC—A review of various applications. Renewable and Sustainable Energy Reviews, 15(8), 3963–3979.
+[11] Lee, J. (2019). Computational methods in chemical engineering. (PR EOS and cubic EOS solution strategies.)
+[12] Kamath, V. (1988). Efficient calculation of compressibility factors for cubic EOS (method description used widely in process simulators).
