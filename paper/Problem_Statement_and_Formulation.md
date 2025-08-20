@@ -4,6 +4,7 @@
 
 Objective
 - Convert low- to medium-grade waste heat into electricity using an Organic Rankine Cycle (ORC) under industrially realistic constraints, and formulate the optimization in an equation-oriented (EO) manner suitable for direct solution in GAMS.
+- Implementation reference: the EO model is implemented in the GAMS file "MMMMMM.gms" (all symbols and equations below follow the same naming convention in that file).
 
 Scope and configurations
 - A single hot-water stream is the heat source. The sink is an air-cooled condenser. Two ORC configurations are analyzed under identical boundary conditions:
@@ -27,7 +28,7 @@ Given data (nominal)
 Working-fluid database (Attachment 1)
 - Each candidate working fluid provides: critical temperature Tc, critical pressure Pc, acentric factor omega, molecular weight MW, and ideal-gas heat capacity coefficients Cp(T) as a polynomial in T.
 
-Decision levers
+Decision levers (mapped 1:1 to MMMMMM.gms)
 - Operating variables: state temperatures T(s) and pressures P(s) at the cycle points; working-fluid mass flow m_wf.
 - Working-fluid identity: selected from the database based on thermodynamic screening and optimization.
 - Recuperator (Configuration B): internal duty and pinch.
@@ -50,6 +51,7 @@ Key outputs
 
 Validation note
 - For fair EO–HYSYS comparisons, both models must use matched boundary conditions (source/sink), identical fluid identity and property package, and consistent unit systems. Differences in fluid choice, bounds, or property methods can materially change W_turb and W_net.
+ - Practical tip: when reporting or debugging, cite values from MMMMMM.gms run logs (W_turb, W_pump, W_net, Q_evap) to ensure consistency with this section.
 
 ## Problem Formulation (<= 1000 words)
 
@@ -63,7 +65,7 @@ Sets and states
   - 5: recuperator hot outlet (low pressure, cooled vapor)
   - 6: recuperator cold outlet (high pressure, preheated liquid)
 
-Decision variables
+Decision variables (as declared in MMMMMM.gms)
 - T(s) [K], P(s) [bar], Z(s) [-], H_ideal(s) [kJ/kg], H_dep(s) [kJ/kg], H(s) [kJ/kg]
 - m_wf [kg/s], Q_evap [kW], Q_recup [kW], W_pump [kW], W_turb [kW], W_net [kW]
 
@@ -72,8 +74,9 @@ Objective (baseline)
 ```
 W_net = eta_gen * ( W_turb - W_pump )
 ```
+ - This objective is coded as the net power equation in MMMMMM.gms (see NET POWER block).
 
-Energy balances and duties
+Energy balances and duties (equation names in MMMMMM.gms mirror these relations)
 ```
 Q_evap  = m_wf * ( H(3) - H(2) )              ; simple A
 Q_evap  = m_wf * ( H(3) - H(6) )              ; recuperated B
@@ -131,7 +134,7 @@ H(T,P) = H_ideal(T) + H_dep(T,P,Z)
 - Phase consistency: use Z_liquid downstream of condenser/pump, Z_vapor downstream of evaporator/turbine.
 - Units: H in kJ/kg, m_wf in kg/s, hence powers in kW by construction.
 
-Variable bounds (illustrative)
+Variable bounds (illustrative; use the same ranges in MMMMMM.gms)
 ```
 300 <= T(1) <= 370     ; K
 300 <= T(2) <= 390
