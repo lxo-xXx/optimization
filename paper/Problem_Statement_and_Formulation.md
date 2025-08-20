@@ -161,3 +161,11 @@ $$
 
 Reporting and comparison
 - We present tabulated results for A and B: W_pump, W_turb, W_net, m_wf, key temperatures/pressures; for B, we also include Q_recup and internal pinch. When comparing with flowsheet simulations, we ensure matched boundary conditions and the same working fluid to avoid misleading differences.
+
+Model-specific symbols (for clarity)
+- component: index over pure working fluids (at least five candidates)
+- properties: columns for Tc, Pc, omega, MW, Tb, density, h_form, h_vap (units: consistent with the enthalpy basis)
+- coefficient: Cp(T) polynomial coefficients a..f (for H_ideal(T) integration)
+- y(component): pure-fluid selector (sum y = 1)
+- Selected properties: Tc, Pc, omega, MW via y-weighted sums
+- R_spec = 8.314 / MW (kJ/kg/K); Cp per kg = Cp_kmol / MW
