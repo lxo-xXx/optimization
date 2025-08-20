@@ -133,6 +133,18 @@ Notes:
 - The EO results above reflect our optimization bounds and fluid set; absolute values vary with condenser/evaporator targets, allowable pressure ratios, and fluid assumptions.
 - The recuperated configuration increases W_net relative to the simple cycle due to internal heat recovery; the magnitude depends on recuperator pinch/UA and the turbine exhaust state.
 
+Optional comparative context (non-identical assumptions; illustrative only)
+
+| Spec                  | EO Model (Config A) | HYSYS ref (Config A – App.1) | Comment |
+|-----------------------|---------------------|-------------------------------|---------|
+| W_pump (kW)           | 430.8               | 311.66                        | Different bounds/fluids |
+| W_turbine (kW)        | 13,470.0            | 22,639.9                      | Different bounds/fluids |
+| Net work (kW)         | 12,365.6            | 21,296                        | Not directly comparable |
+| Selected fluid        | R290                | FC‑72                         | Different fluid sets    |
+| m_wf (kg/s)           | 107.71              | 0.8202 mol/s                  | Units/definition differ |
+
+This table is provided to mirror the reporting style of simulator-based studies and should not be interpreted as a like‑for‑like validation because operating assumptions, units, and fluid sets differ. A strict validation would require matched boundary conditions and a shared working‑fluid choice in both EO and HYSYS models.
+
 ### Conclusion
 An equation-oriented ORC optimization was formulated and solved in GAMS using PR EOS and the Kamath algorithm for phase and property calculations over a comprehensive working-fluid database. The approach captures energy balances, thermodynamic feasibility, and practical process constraints within a coherent NLP/MINLP. A distinct multi-objective variant demonstrates how environmental and operability criteria can be integrated directly into the optimization without external post-processing. Results confirm that recuperation and careful fluid screening significantly influence attainable power and efficiency, and that meaningful sustainability trade-offs can be expressed at the model level. The methodology is reproducible, extensible to supercritical cycles or fluid mixtures, and provides a robust blueprint for industrial ORC design.
 
