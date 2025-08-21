@@ -60,13 +60,11 @@ thermodynamic analyses toward multi-objective optimization and hybrid
 approaches. For instance, Palma-Flores et al. (2015; 2016) proposed
 ...
 
-1.  **Results and Discussion**
+1.  **Results and discution**
 
-6.1 Part A – Model vs HYSYS (simple configuration)
+نتایج قسمت A
 
-Table A‑1. Direct comparison
-
-| Spec | HYSYS | GAMS | Error % | Note |
+| Spec | Hysys | GAMS | Error% | توضیح |
 |---|---:|---:|---:|---|
 | Wt | 8699.537 | 44853.5 | -415.585 | Heat Flow [kJ/s] |
 | Wp | 242.70688 | 242.803 | -0.0396 | Heat Flow [kJ/s] |
@@ -78,14 +76,12 @@ Table A‑1. Direct comparison
 | T2 | 312.40593 | 312.409 | -0.00098 | Temperature [K] |
 | T4 | 313.24878 | 313.151 | 0.031215 | Temperature [K] |
 
-Observation (FA): بیشتر متغیرها خطای ناچیز دارند؛ انحراف‌های Wt و H2 ناشی از فرم کار توربین (H1−H2 به‌جای H3−H4 و عدم اعمال η_turb) و جزئیات آنتالپی جریان ۲ است.
+Here is the data from the spreadsheet in the image (Part A candidates):
 
-Table A‑2. HYSYS candidates
-
-| # | Fluid | Wp (kJ/s) | Wt (kJ/s) | Wnet (kJ/s) |
-|---:|---|---:|---:|---:|
-| 1 | 2,2‑dimethylbutane | 258.134799 | 6839.564 | 5213.5163 |
-| 2 | 4‑methyl‑2‑pentene | 219.5780021 | 6365.124 | 4872.8213 |
+| Hysys | Name | Wp | Wt | Wnet(Kj/s) |
+|---|---|---|---|---|
+| 1 | 2,2-dimethylbutane | 258.134799 | 6839.564 | 5213.5163 |
+| 2 | 4-methyl-2-pentene | 219.5780021 | 6365.124 | 4872.8213 |
 | 3 | Acetone | 56.07 |  |  |
 | 4 | Benzene | 92.17404287 | 5588.065 | 4378.2778 |
 | 5 | Cyclopentane | 221.3920083 | 7617.756 | 5872.813 |
@@ -94,18 +90,22 @@ Table A‑2. HYSYS candidates
 | 8 | FC72 | 65.9 |  |  |
 | 9 | Isohexane | 205.8012394 | 6114.503 | 4685.8008 |
 | 10 | Methanol | 108.9162242 | 6929.143 | 5434.3979 |
-| 11 | n‑heptane | 71.80336678 | 3557.273 | 2774.0151 |
-| 12 | n‑hexane | 166.2908911 | 5674.165 | 4373.0408 |
-| 13 | n‑pentane | 344.476657 | 7579.137 | 5718.8307 |
+| 11 | n-heptane | 71.80336678 | 3557.273 | 2774.0151 |
+| 12 | n-hexane | 166.2908911 | 5674.165 | 4373.0408 |
+| 13 | n-pentane | 344.476657 | 7579.137 | 5718.8307 |
 | 14 | R113 | 278.818838 | 7197.7 | 5479.2284 |
 | 15 | R124 | 36.6 |  |  |
 | 16 | R141b | 362.5213291 | 8510.272 | 6445.6959 |
 
-Conclusion (FA): سیالات با جرم مولکولی بزرگ‌تر عموماً W_net بیشتری تولید کرده‌اند؛ هم‌راستا با معیار دمای بحرانی گزارش‌شده در ادبیات.
+نتایج: سیال انتخاب شده همان سیال HYSYS است؛ اغلب خطاها کوچک‌اند و فقط کار توربین و آنتالپی جریان ۲ انحراف دارند.
 
-6.2 Part B – HYSYS outputs and GAMS status
+نتیجه: از بین ۵ سیال انتخابی، سیالات با جرم مولکولی بزرگ‌تر W_net بیشتری ایجاد کرده‌اند؛ مطابق ادبیات (1,2) درباره معیار دمای بحرانی.
 
-HYSYS table for Part B (from p.xlsx) will be placed here. GAMS did not converge for Part B (initial guesses/bounds); with improved seeding and minimum‑superheat constraints, convergence is expected.
+1) Song C, Gu M, Miao Z, Liu C, Xu J. Energy 2019;174:97–109. https://doi.org/10.1016/j.energy.2019.02.171
+
+2) Xu J, Yu C. Energy 2014;74:719–33. https://doi.org/10.1016/j.energy.2014.07.038
+
+نتایج کد قسمت B: جدول HYSYS قسمت 2 (از p.xlsx) ذکر شود. مدلسازی GAMS به دلیل حدس‌های اولیه و شرایط مرزی همگرا نشد.
 
 2.  **Conclusions**
 
