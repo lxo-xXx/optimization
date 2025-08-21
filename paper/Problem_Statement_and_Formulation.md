@@ -24,7 +24,7 @@ Table 1. Source/sink and equipment data (nominal)
 | Hot-water outlet temperature  | T_hw_out    | 343.15  | K          |
 | Hot-water mass flow           | m_hot       | 100     | kg/s       |
 | Cooling air inlet temperature | T_air_in    | 298.15  | K (25 °C)  |
-| Water heat capacity           | Cp_water    | 4.18    | kJ/(kg*K)  |
+| Water heat capacity           | Cp_water    | 4.675   | kJ/(kg*K)  |
 | Condenser approach            | dT_approach | 5       | K          |
 | Evaporator pinch              | dT_pinch    | 5       | K          |
 | Pump isentropic efficiency    | eta_pump    | 0.75    | -          |
