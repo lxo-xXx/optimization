@@ -81,10 +81,16 @@ For the recuperated cycle, we add two states:
 
 ### Objective (baseline)
 
-Maximize net power:
+Maximize net power (core form):
 $$
 W_{net} = \eta_{gen}\,\big( W_{turb} - W_{pump} \big) \quad (1)
 $$
+
+If a stabilization/selection penalty is used in the implementation, the objective is written as:
+$$
+W_{net} = \eta_{gen}\, W_{turbine}\,-\, w_{pump}\,-\, \rho\,\big( V_2\, sV_2 + L_2\, sL_2 \big) \quad (1')
+$$
+where $\rho$ is a large coefficient (Big-M–style) and $V_2, L_2, sV_2, sL_2$ are the vapor/liquid indicators at state 2 used to enforce consistent phase selection. When the penalty is inactive (recommended for reporting), equation (1) is used.
 
 ### Energy balances and duties
 $$
