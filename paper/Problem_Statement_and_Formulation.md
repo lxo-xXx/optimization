@@ -2,28 +2,31 @@
 
 ## Problem Statement (<= 1000 words)
 
-Consider a hot water stream with the specifications shown in Table 1. The aim is to optimize the ORC unit (Configuration A) to maximize the power output of the cycle. An air‑cooled condenser is employed in the ORC unit. The input parameters and calculation conditions are listed in Table 2.
+Objective
+- We aim to convert low- to medium-grade waste heat into electricity using an Organic Rankine Cycle (ORC) under industrially realistic constraints, and to formulate the optimization in an equation-oriented (EO) manner suitable for rigorous solution.
 
-Table 1: Waste hot water stream specifications
+Scope and configurations
+- A single hot-water stream is the heat source. The sink is an air-cooled condenser. Two ORC configurations are analyzed under identical boundary conditions:
+  - Configuration A (simple cycle): evaporator -> turbine -> condenser -> pump
+  - Configuration B (recuperated cycle): the simple cycle augmented with an internal heat exchanger (recuperator) that preheats the working fluid using turbine exhaust
 
-| Parameter   | Value    |
-|-------------|----------|
-| Pressure    | 10 bara  |
-| Temperature | 170 °C   |
-| Flowrate    | 100 kg/s |
-| Composition | Pure water |
+Given data (nominal)
 
-Table 2: Process design parameters
+Table 1. Source/sink and equipment data (nominal)
 
-| Parameter                               | Value |
-|-----------------------------------------|-------|
-| Hot water discharged temperature        | 70 °C |
-| Cooling air inlet temperature           | 25 °C |
-| Pressure drop (all heat exchangers)     | 0 bar |
-| Pump isentropic efficiency              | 75%   |
-| Turbine isentropic efficiency           | 80%   |
-| Generator efficiency                    | 95%   |
-| Approach temperature (all heat exchangers) | 5 °C |
+| Item                          | Symbol      | Value   | Units      |
+|-------------------------------|-------------|---------|------------|
+| Hot-water pressure            | P_hw        | 10      | bara       |
+| Hot-water inlet temperature   | T_hw_in     | 443.15  | K          |
+| Hot-water outlet temperature  | T_hw_out    | 343.15  | K          |
+| Hot-water mass flow           | m_hot       | 100     | kg/s       |
+| Cooling air inlet temperature | T_air_in    | 298.15  | K (25 °C)  |
+| Water heat capacity           | Cp_water    | 4.18    | kJ/(kg*K)  |
+| Condenser approach            | dT_approach | 5       | K          |
+| Evaporator pinch              | dT_pinch    | 5       | K          |
+| Pump isentropic efficiency    | eta_pump    | 0.75    | -          |
+| Turbine isentropic efficiency | eta_turb    | 0.80    | -          |
+| Generator efficiency          | eta_gen     | 0.95    | -          |
 
 Working‑fluid candidates and selection (pure fluids)
 - We consider a set of at least five pure working fluids drawn from the recommended list and literature. Thermophysical constants (Tc, Pc, omega, MW) are treated as known for each candidate. Heat‑capacity treatment follows the model: Cp(T) polynomials if available, otherwise a constant cp_avg. The optimal fluid is selected within the optimization (or via a screen–then–solve protocol) while ensuring that only one pure fluid is active in each run.
