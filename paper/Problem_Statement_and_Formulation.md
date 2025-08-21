@@ -103,8 +103,9 @@ $$
 W_{turb} = \dot{m}_{wf}\,\big(H_3 - H_4\big) \quad (3)
 $$
 $$
-W_{pump} = \dot{m}_{wf}\,\big(H_2 - H_1\big) \quad (4)\ \ \n\text{(baseline thermodynamic identity)}
+W_{pump} = \dot{m}_{wf}\,\big(H_2 - H_1\big) \quad (4)
 $$
+Explanation: Baseline thermodynamic identity; in MMMMMM.gms a head-based form (4') is used.
 Implementation in MMMMMM.gms (head-based pump work):
 $$
 \Delta h_{pump} = \frac{(P_1 - P_3)\,\dot{m}_{wf}\,MW}{\rho},\quad W_{pump} = \frac{\Delta h_{pump}}{\eta_{pump}} \quad (4')
@@ -114,6 +115,7 @@ $$
 $$
 
 ### Isentropic relations (engineering form)
+Explanation: Reference equations often used in EO modeling; not enforced in MMMMMM.gms.
 - Turbine (3 -> 4):
 $$
 T_{4s} = T_3\,\Big( \tfrac{P_4}{P_3} \Big)^{\frac{k_3-1}{k_3}},\quad T_4 = T_3 - \eta_{turb}\,\big(T_3 - T_{4s}\big) \quad (6)
@@ -143,6 +145,7 @@ $$
 $$
 P_3 \le \alpha_{pc}\,P_c \quad (11)
 $$
+Explanation: These constraints encode minimum temperature driving forces and the high/low pressure structure; (11) keeps operation below critical pressure to avoid pathological regions.
 
 ### Recuperator constraints (Configuration B)
 $$
@@ -151,6 +154,7 @@ $$
 $$
 T_4 - T_6 \ge \Delta T_{recup},\quad T_5 - T_2 \ge \Delta T_{recup} \quad (13)
 $$
+Explanation: Energy balance equates hot- and cold-side duties; minimum approach prevents temperature cross and ensures feasible heat exchange.
 
 ### Thermodynamics: PR EOS and enthalpy model
 $$
@@ -167,6 +171,7 @@ H_{ideal}(T) = \int_{T_{ref}}^{T} C_p(T)\,dT,\quad H_{dep} = R_{spec} T (Z - 1),
 $$
 - Phase consistency: use Z_liquid downstream of condenser/pump, Z_vapor downstream of evaporator/turbine.
 - Units: H in kJ/kg, m_wf in kg/s, hence powers in kW by construction.
+Explanation: PR EOS gives Z and departure enthalpy; Kamath-compatible root handling ensures stable liquid/vapor roots for Z in optimization.
 
 ### Variable bounds (illustrative)
 ```
@@ -177,12 +182,14 @@ $$
 1   <= P(s) <= 0.75*Pc ; bar
 1   <= m_wf <= 120     ; kg/s
 ```
+Explanation: Bounds reflect physical feasibility and help the NLP avoid nonphysical regions (e.g., near-critical pressures, sub-ambient temperatures).
 
 ### Optional multi-objective extension
 $$
 \max\ J = W_{net} - \lambda_{mass}\,\dot{m}_{wf} - \lambda_{press}\,P_3 \quad (18)
 $$
 - Nonnegative weights encode preferences for lower flow (smaller equipment) and lower high-side pressure (operability/safety).
+Explanation: Penalizing flow and P_high trades a small portion of power for improved operability and downsized equipment.
 
 ### Reporting and comparison
 
