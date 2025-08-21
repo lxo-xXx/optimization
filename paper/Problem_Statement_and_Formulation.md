@@ -2,15 +2,18 @@
 
 ## Problem Statement (<= 1000 words)
 
-Objective
-- We aim to convert low- to medium-grade waste heat into electricity using an Organic Rankine Cycle (ORC) under industrially realistic constraints, and to formulate the optimization in an equation-oriented (EO) manner suitable for rigorous solution.
+### Objective
 
-Scope and configurations
-- A single hot-water stream is the heat source. The sink is an air-cooled condenser. Two ORC configurations are analyzed under identical boundary conditions:
-  - Configuration A (simple cycle): evaporator -> turbine -> condenser -> pump
-  - Configuration B (recuperated cycle): the simple cycle augmented with an internal heat exchanger (recuperator) that preheats the working fluid using turbine exhaust
+We aim to convert low- to medium-grade waste heat into electricity using an Organic Rankine Cycle (ORC) under industrially realistic constraints, and to formulate the optimization in an equation-oriented (EO) manner suitable for rigorous solution.
 
-Given data (nominal)
+### Scope and configurations
+
+A single hot-water stream is the heat source. The sink is an air-cooled condenser. Two ORC configurations are analyzed under identical boundary conditions:
+
+- Configuration A (simple cycle): evaporator → turbine → condenser → pump
+- Configuration B (recuperated cycle): the simple cycle augmented with an internal heat exchanger (recuperator) that preheats the working fluid using turbine exhaust
+
+### Given data (nominal)
 
 Table 1. Source/sink and equipment data (nominal)
 
@@ -28,50 +31,62 @@ Table 1. Source/sink and equipment data (nominal)
 | Turbine isentropic efficiency | eta_turb    | 0.80    | -          |
 | Generator efficiency          | eta_gen     | 0.95    | -          |
 
-Working‑fluid candidates and selection (pure fluids)
-- We consider a set of at least five pure working fluids drawn from the recommended list and literature. Thermophysical constants (Tc, Pc, omega, MW) are treated as known for each candidate. Heat‑capacity treatment follows the model: Cp(T) polynomials if available, otherwise a constant cp_avg. The optimal fluid is selected within the optimization (or via a screen–then–solve protocol) while ensuring that only one pure fluid is active in each run.
+### Working‑fluid candidates and selection (pure fluids)
 
-Decision levers
+We consider a set of at least five pure working fluids drawn from the recommended list and literature. Thermophysical constants (Tc, Pc, omega, MW) are treated as known for each candidate. Heat‑capacity treatment follows the model: Cp(T) polynomials if available, otherwise a constant cp_avg. The optimal fluid is selected within the optimization (or via a screen–then–solve protocol) while ensuring that only one pure fluid is active in each run.
+
+### Decision levers
+
 - Operating variables: state temperatures T(s) and pressures P(s) at the cycle points; working‑fluid mass flow m_wf.
 - Working‑fluid identity: chosen from the candidate set (exactly one pure fluid active).
 - Recuperator (Configuration B): internal duty and pinch (optional extension).
 
-Thermophysical modeling
-- Property calculations use the Peng–Robinson (PR) equation of state. A stable cubic‑root selection consistent with liquid/vapor phases (Kamath‑compatible handling) provides compressibility Z and departure functions. Ideal‑gas enthalpy uses Cp(T) polynomials if present, otherwise a constant cp_avg. Total enthalpy is H = H_ideal(T) + H_departure(T,P,Z).
+### Thermophysical modeling
 
-Assumptions
+Property calculations use the Peng–Robinson (PR) equation of state. A stable cubic‑root selection consistent with liquid/vapor phases (Kamath‑compatible handling) provides compressibility Z and departure functions. Ideal‑gas enthalpy uses Cp(T) polynomials if present, otherwise a constant cp_avg. Total enthalpy is H = H_ideal(T) + H_departure(T,P,Z).
+
+### Assumptions
+
 - Steady state; negligible heat losses outside modeled exchangers; pressure drops in exchangers per Table 2; ambient conditions fixed for condenser approach.
 
-Key outputs
+### Key outputs
+
 - Net power W_net, thermal efficiency, specific work, working‑fluid mass flow, high/low pressures, state temperatures, and (for Configuration B) recuperator duty and internal pinch.
 
-Validation note
-- For fair comparisons against flowsheet simulations, matched boundary conditions (source/sink), identical fluid identity and property package, and consistent unit systems are required. Differences in fluid choice, bounds, or property methods can materially change W_turb and W_net.
+### Validation note
+
+For fair comparisons against flowsheet simulations, matched boundary conditions (source/sink), identical fluid identity and property package, and consistent unit systems are required. Differences in fluid choice, bounds, or property methods can materially change W_turb and W_net.
 
 ## Problem Formulation (<= 1000 words)
 
-Sets and states
-- We use a four-state numbering for the simple cycle:
-  - 1: condenser outlet (low pressure, liquid)
-  - 2: pump outlet (high pressure, liquid)
-  - 3: evaporator outlet (high pressure, vapor)
-  - 4: turbine outlet (low pressure, vapor)
-- For the recuperated cycle, we add two states:
-  - 5: recuperator hot outlet (low pressure, cooled vapor)
-  - 6: recuperator cold outlet (high pressure, preheated liquid)
+### Sets and states
 
-Decision variables
+We use a four-state numbering for the simple cycle:
+
+- 1: condenser outlet (low pressure, liquid)
+- 2: pump outlet (high pressure, liquid)
+- 3: evaporator outlet (high pressure, vapor)
+- 4: turbine outlet (low pressure, vapor)
+
+For the recuperated cycle, we add two states:
+
+- 5: recuperator hot outlet (low pressure, cooled vapor)
+- 6: recuperator cold outlet (high pressure, preheated liquid)
+
+### Decision variables
+
 - T(s) [K], P(s) [bar], Z(s) [-], H_ideal(s) [kJ/kg], H_dep(s) [kJ/kg], H(s) [kJ/kg]
 - m_wf [kg/s], Q_evap [kW], Q_recup [kW], W_pump [kW], W_turb [kW], W_net [kW]
 - Fluid selection dof: either binary indicators y_i (sum_i y_i = 1) for an integrated selection, or an external screening step that activates one pure fluid per run.
 
-Objective (baseline)
-- Maximize net power:
+### Objective (baseline)
+
+Maximize net power:
 $$
 W_{net} = \eta_{gen}\,\big( W_{turb} - W_{pump} \big) \quad (1)
 $$
 
-Energy balances and duties
+### Energy balances and duties
 $$
 Q_{evap} = \dot{m}_{wf}\,\big(H_3 - H_2\big) \quad \text{(simple A)} \quad (2a)
 $$
@@ -88,7 +103,7 @@ $$
 \dot{m}_{hot}\,C_{p,water}\,(T_{hw,in} - T_{hw,out}) \ge Q_{evap} \quad (5)
 $$
 
-Isentropic relations (engineering form)
+### Isentropic relations (engineering form)
 - Turbine (3 -> 4):
 $$
 T_{4s} = T_3\,\Big( \tfrac{P_4}{P_3} \Big)^{\frac{k_3-1}{k_3}},\quad T_4 = T_3 - \eta_{turb}\,\big(T_3 - T_{4s}\big) \quad (6)
@@ -100,7 +115,7 @@ $$
 - Here k = cp / (cp - R_spec) and cp(T) is obtained from the derivative of H_ideal(T).
 - Note: A full PR-based isentropic step would use s-const constraints; the above is a robust approximation that preserves units and trends without introducing additional differential relations.
 
-Heat-transfer and pressure-structure constraints
+### Heat-transfer and pressure-structure constraints
 $$
 T_3 \le T_{hw,in} - \Delta T_{pinch} \quad (8)
 $$
@@ -114,7 +129,7 @@ $$
 P_3 \le \alpha_{pc}\,P_c \quad (11)
 $$
 
-Recuperator constraints (Configuration B)
+### Recuperator constraints (Configuration B)
 $$
 \dot{m}_{wf}\,\big(H_4 - H_5\big) = \dot{m}_{wf}\,\big(H_6 - H_2\big) \quad (12)
 $$
@@ -122,7 +137,7 @@ $$
 T_4 - T_6 \ge \Delta T_{recup},\quad T_5 - T_2 \ge \Delta T_{recup} \quad (13)
 $$
 
-Thermodynamics: PR EOS and enthalpy model
+### Thermodynamics: PR EOS and enthalpy model
 $$
 \alpha(T) = \big[ 1 + \kappa\,(1 - \sqrt{T/T_c}) \big]^2,\quad \kappa = 0.37464 + 1.54226\,\omega - 0.26992\,\omega^2 \quad (14)
 $$
@@ -138,7 +153,7 @@ $$
 - Phase consistency: use Z_liquid downstream of condenser/pump, Z_vapor downstream of evaporator/turbine.
 - Units: H in kJ/kg, m_wf in kg/s, hence powers in kW by construction.
 
-Variable bounds (illustrative)
+### Variable bounds (illustrative)
 ```
 300 <= T(1) <= 370     ; K
 300 <= T(2) <= 390
@@ -148,16 +163,18 @@ Variable bounds (illustrative)
 1   <= m_wf <= 120     ; kg/s
 ```
 
-Optional multi-objective extension
+### Optional multi-objective extension
 $$
 \max\ J = W_{net} - \lambda_{mass}\,\dot{m}_{wf} - \lambda_{press}\,P_3 \quad (18)
 $$
 - Nonnegative weights encode preferences for lower flow (smaller equipment) and lower high-side pressure (operability/safety).
 
-Reporting and comparison
-- We present tabulated results for A and B: W_pump, W_turb, W_net, m_wf, key temperatures/pressures; for B, we also include Q_recup and internal pinch. When comparing with flowsheet simulations, we ensure matched boundary conditions and the same working fluid to avoid misleading differences.
+### Reporting and comparison
 
-Model-specific symbols (for clarity)
+We present tabulated results for A and B: W_pump, W_turb, W_net, m_wf, key temperatures/pressures; for B, we also include Q_recup and internal pinch. When comparing with flowsheet simulations, we ensure matched boundary conditions and the same working fluid to avoid misleading differences.
+
+### Model-specific symbols (for clarity)
+
 - component: index over pure working fluids (at least five candidates)
 - properties: columns for Tc, Pc, omega, MW, Tb, density, h_form, h_vap (units: consistent with the enthalpy basis)
 - coefficient: Cp(T) polynomial coefficients a..f (for H_ideal(T) integration)
