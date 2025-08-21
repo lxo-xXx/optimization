@@ -2,53 +2,45 @@
 
 ## Problem Statement (<= 1000 words)
 
-Objective
-- We aim to convert low- to medium-grade waste heat into electricity using an Organic Rankine Cycle (ORC) under industrially realistic constraints, and to formulate the optimization in an equation-oriented (EO) manner suitable for rigorous solution.
+Consider a hot water stream with the specifications shown in Table 1. The aim is to optimize the ORC unit (Configuration A) to maximize the power output of the cycle. An air‑cooled condenser is employed in the ORC unit. The input parameters and calculation conditions are listed in Table 2.
 
-Scope and configurations
-- A single hot-water stream is the heat source. The sink is an air-cooled condenser. Two ORC configurations are analyzed under identical boundary conditions:
-  - Configuration A (simple cycle): evaporator -> turbine -> condenser -> pump
-  - Configuration B (recuperated cycle): the simple cycle augmented with an internal heat exchanger (recuperator) that preheats the working fluid using turbine exhaust
+Table 1: Waste hot water stream specifications
 
-Given data (nominal)
+| Parameter   | Value    |
+|-------------|----------|
+| Pressure    | 10 bara  |
+| Temperature | 170 °C   |
+| Flowrate    | 100 kg/s |
+| Composition | Pure water |
 
-Table 1. Source/sink and equipment data (nominal)
+Table 2: Process design parameters
 
-| Item | Symbol | Value | Units |
-|---|---|---:|---|
-| Hot-water inlet temperature | T_hw_in | 443.15 | K |
-| Hot-water outlet temperature | T_hw_out | 343.15 | K |
-| Hot-water mass flow | m_hot | 100 | kg/s |
-| Water heat capacity | Cp_water | 4.18 | kJ/(kg*K) |
-| Condenser approach | dT_approach | 5 | K |
-| Evaporator pinch | dT_pinch | 5 | K |
-| Pump isentropic efficiency | eta_pump | 0.75 | - |
-| Turbine isentropic efficiency | eta_turb | 0.80 | - |
-| Generator efficiency | eta_gen | 0.95 | - |
+| Parameter                               | Value |
+|-----------------------------------------|-------|
+| Hot water discharged temperature        | 70 °C |
+| Cooling air inlet temperature           | 25 °C |
+| Pressure drop (all heat exchangers)     | 0 bar |
+| Pump isentropic efficiency              | 75%   |
+| Turbine isentropic efficiency           | 80%   |
+| Generator efficiency                    | 95%   |
+| Approach temperature (all heat exchangers) | 5 °C |
 
-Working-fluid candidates and selection (pure fluids)
-- We consider a set of at least five pure working fluids drawn from the recommended list and literature. Thermophysical constants (Tc, Pc, omega, MW) are treated as known for each candidate. Heat-capacity treatment follows the model: Cp(T) polynomials if available, otherwise a constant cp_avg. The optimal fluid is selected within the optimization (or via a screen–then–solve protocol) while ensuring that only one pure fluid is active in each run.
+Working‑fluid candidates and selection (pure fluids)
+- We consider a set of at least five pure working fluids drawn from the recommended list and literature. Thermophysical constants (Tc, Pc, omega, MW) are treated as known for each candidate. Heat‑capacity treatment follows the model: Cp(T) polynomials if available, otherwise a constant cp_avg. The optimal fluid is selected within the optimization (or via a screen–then–solve protocol) while ensuring that only one pure fluid is active in each run.
 
 Decision levers
-- Operating variables: state temperatures T(s) and pressures P(s) at the cycle points; working-fluid mass flow m_wf.
-- Working-fluid identity: chosen from the candidate set (exactly one pure fluid active).
-- Recuperator (Configuration B): internal duty and pinch.
-
-Performance targets
-- Maximize net electrical power while satisfying process and thermodynamic constraints.
-- Primary focus on Configuration A per assignment; Configuration B is treated as an optional extension.
-- Optionally explore trade-offs (e.g., operating conservatism) with a composite objective.
+- Operating variables: state temperatures T(s) and pressures P(s) at the cycle points; working‑fluid mass flow m_wf.
+- Working‑fluid identity: chosen from the candidate set (exactly one pure fluid active).
+- Recuperator (Configuration B): internal duty and pinch (optional extension).
 
 Thermophysical modeling
-- Property calculations use the Peng–Robinson (PR) equation of state. A stable cubic-root selection consistent with liquid/vapor phases (Kamath-compatible handling) provides compressibility Z and departure functions. Ideal-gas enthalpy uses the same approach as the model code: Cp(T) polynomials if present, otherwise a constant cp_avg. Total enthalpy is H = H_ideal(T) + H_departure(T,P,Z).
+- Property calculations use the Peng–Robinson (PR) equation of state. A stable cubic‑root selection consistent with liquid/vapor phases (Kamath‑compatible handling) provides compressibility Z and departure functions. Ideal‑gas enthalpy uses Cp(T) polynomials if present, otherwise a constant cp_avg. Total enthalpy is H = H_ideal(T) + H_departure(T,P,Z).
 
 Assumptions
-- Steady state; single working fluid per case; negligible heat losses outside modeled exchangers; pressure drops lumped into equipment where applicable.
-- PR EOS provides adequate accuracy over the operating window; Cp(T) polynomials are valid in the temperature range of interest.
-- Ambient conditions remain fixed for condenser approach evaluation.
+- Steady state; negligible heat losses outside modeled exchangers; pressure drops in exchangers per Table 2; ambient conditions fixed for condenser approach.
 
 Key outputs
-- Net power W_net, thermal efficiency, specific work, working-fluid mass flow, high/low pressures, state temperatures, and (for Configuration B) recuperator duty and internal pinch.
+- Net power W_net, thermal efficiency, specific work, working‑fluid mass flow, high/low pressures, state temperatures, and (for Configuration B) recuperator duty and internal pinch.
 
 Validation note
 - For fair comparisons against flowsheet simulations, matched boundary conditions (source/sink), identical fluid identity and property package, and consistent unit systems are required. Differences in fluid choice, bounds, or property methods can materially change W_turb and W_net.
