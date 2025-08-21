@@ -103,7 +103,11 @@ $$
 W_{turb} = \dot{m}_{wf}\,\big(H_3 - H_4\big) \quad (3)
 $$
 $$
-W_{pump} = \dot{m}_{wf}\,\big(H_2 - H_1\big) \quad (4)
+W_{pump} = \dot{m}_{wf}\,\big(H_2 - H_1\big) \quad (4)\ \ \n\text{(baseline thermodynamic identity)}
+$$
+Implementation in MMMMMM.gms (head-based pump work):
+$$
+\Delta h_{pump} = \frac{(P_1 - P_3)\,\dot{m}_{wf}\,MW}{\rho},\quad W_{pump} = \frac{\Delta h_{pump}}{\eta_{pump}} \quad (4')
 $$
 $$
 \dot{m}_{hot}\,C_{p,water}\,(T_{hw,in} - T_{hw,out}) \ge Q_{evap} \quad (5)
@@ -120,6 +124,11 @@ T_{2s} = T_1\,\Big( \tfrac{P_2}{P_1} \Big)^{\frac{k_1-1}{k_1}},\quad T_2 = T_1 +
 $$
 - Here k = cp / (cp - R_spec) and cp(T) is obtained from the derivative of H_ideal(T).
 - Note: A full PR-based isentropic step would use s-const constraints; the above is a robust approximation that preserves units and trends without introducing additional differential relations.
+
+Implementation status in MMMMMM.gms:
+- The explicit isentropic T-relations (6)–(7) are not enforced in the current MMMMMM.gms.
+- The turbine efficiency parameter is defined but not applied; turbine work uses enthalpy difference as in (3).
+- Pump work follows the head-based expression (4').
 
 ### Heat-transfer and pressure-structure constraints
 $$

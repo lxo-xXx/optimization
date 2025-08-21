@@ -145,8 +145,8 @@ maximize W_net = η_gen × (W_turb − W_pump)
 
 Energy balances (Configuration A):
 - Evaporator: Q_evap = m_wf × (h3 − h2)
-- Turbine:   W_turb = m_wf × η_turb × (h3 − h4)
-- Pump:      W_pump = m_wf × (h2 − h1) / η_pump
+- Turbine (engineering form):   W_turb = m_wf × (h3 − h4)  [η_turb not explicitly applied in MMMMMM.gms]
+- Pump (implemented in MMMMMM.gms): Δh_pump = ((P1 − P3) × m_wf × MW)/ρ;  W_pump = Δh_pump/η_pump
 - Condenser: m_hw × c_p,water × (T_hw,in − T_hw,out) ≥ Q_evap
 
 Key process constraints:
